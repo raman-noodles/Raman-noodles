@@ -1,0 +1,2 @@
+requires:
+%pip install jcamp
