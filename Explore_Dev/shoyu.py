@@ -45,12 +45,16 @@ def add_jdx(filename, label=None):
     """
     shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     data = jcamp.JCAMP_reader(filename)
+    y_abs = 1 - data['y']
+    data['yunits'] = 'ABSORBANCE'
+    data['y'] = y_abs
     if label is None:
         shoyu_data_dict.update({data['title']: data})
+        print('{} added to shoyu_data_dict.p'.format(data['title']))
     else:
         shoyu_data_dict.update({label: data})
+        print('{} added to shoyu_data_dict.p'.format(label))
     pickle.dump(shoyu_data_dict, open('raman_spectra/shoyu_data_dict.p', 'wb'))
-    print('shoyu_data_dict.p updated')
     return shoyu_data_dict
 
 
