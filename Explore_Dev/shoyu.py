@@ -4,6 +4,8 @@ The CAS Registry Number for the compound is used to download the data and then a
 it to a dictionary called shoyu_data_dict
 Functionality also allows for any .jdx file to be added to the shoyu_data_dict
 pickle file.
+
+Developed by Raman-Noodles team.
 """
 
 import jcamp
