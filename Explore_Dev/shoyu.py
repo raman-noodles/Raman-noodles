@@ -49,7 +49,7 @@ def add_jdx(filename, label=None):
     data['yunits'] = 'ABSORBANCE'
     data['y'] = y_abs
     if label is None:
-        shoyu_data_dict.update({data['title']: data})
+        shoyu_data_dict.update({data['title'].upper(): data})
         print('{} added to shoyu_data_dict.p'.format(data['title']))
     else:
         shoyu_data_dict.update({label: data})
@@ -58,7 +58,31 @@ def add_jdx(filename, label=None):
     return shoyu_data_dict
 
 
-def more_please(cas_num, label):
+def initialize_standard_library():
+    """
+    Function that downloads a standard library of raman spectra
+    from the NIST Chemistry WebBook. It generates a folder and a
+    pickle file for storing data for future use.
+    """
+    # dictionary of CAS registry numbers for standard library
+    cas_lib = {'water':'7732-18-5',
+               'carbon monoxide':'630-08-0',
+               'carbon dioxide':'124-38-9',
+               'formic acid':'64-18-6',
+               'isopropyl alcohol':'67-63-0',
+               'ethanol':'64-17-5',
+               'acetone':'67-64-1'}
+    # initialize empty shoyu_data_dict
+    shoyu_data_dict = {}
+    os.makedirs('raman_spectra', exist_ok=True)
+    pickle.dump(shoyu_data_dict, open('raman_spectra/shoyu_data_dict.p', 'wb'))
+    for item in cas_lib:
+        cas_num = ''.join(cas_lib[item].split('-'))
+        download_cas(cas_num)
+        add_jdx('raman_spectra/'+cas_num+'_NIST_IR.jdx', label=None)
+
+
+def more_please(cas_num, label=None):
     """
     Function that downloads a spectra from the NIST
     database, adds it to shoyu_data_dict, pickles shoyu_data_dict
