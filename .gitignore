@@ -4,3 +4,4 @@ raman_spectra/
 # do not track these file types
 *.jdx
 *.p
+*.ipynb_checkpoints
