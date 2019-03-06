@@ -31,7 +31,7 @@ def download_cas(cas_num):
         else:
             if data.status_code == 200:
                 open('raman_spectra/'+cas_num+'_NIST_IR.jdx', 'wb').write(data.content)
-                print('file downloaded too raman_spectra folder')
+                print('file downloaded to raman_spectra folder')
             else:
                 print('Request status: {}'.format(data.status_code))
     else:
