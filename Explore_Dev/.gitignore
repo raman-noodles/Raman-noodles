@@ -1,0 +1,6 @@
+# do not track the contents of these folders
+raman_spectra/
+
+# do not track these file types
+*.jdx
+*.p
