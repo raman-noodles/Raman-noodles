@@ -50,10 +50,10 @@ def add_jdx(filename, label=None):
     data['y'] = y_abs
     if label is None:
         shoyu_data_dict.update({data['title'].upper(): data})
-        print('{} added to shoyu_data_dict.p'.format(data['title']))
+        print('{} loaded from folder into shoyu_data_dict.p'.format(data['title']))
     else:
         shoyu_data_dict.update({label: data})
-        print('{} added to shoyu_data_dict.p'.format(label))
+        print('{} loaded from folder into shoyu_data_dict.p'.format(label))
     pickle.dump(shoyu_data_dict, open('raman_spectra/shoyu_data_dict.p', 'wb'))
     return shoyu_data_dict
 
