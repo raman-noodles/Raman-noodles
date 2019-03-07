@@ -11,7 +11,7 @@ This package allows for the autoanalysis of a mixture's Raman spectra. It compar
 
 ### Assumptions and Project Scope
 A. Baseline subtraction is beyond the scope of this project, thus one of the main assumptions, or pre-steps that need to be done before use of this software is baseline subtraction of a user's mixture raman spectra. 
-B. For example of ... [need to fill in here]
+B. Storing data library that is beyond the components of Formic Acid (Hydrogen, Water, Carbon dioxide, Carbon monoxide) are beyond the scope of the project at this time.
 
 
 ### Project Breakdown
@@ -24,14 +24,17 @@ These three sections have their own juypter notebooks with more detail included 
 
 ### User Flow: As a user you should follow these steps to apply Raman-Noodles to YOUR data
 #### Note: these are major steps that will walk you through the three major steps. 
-1. 
+1. [need to fill in]
 
 
 ### Example of Using Raman Noodles
-A juypter notebook 
+A juypter notebook ... [need to fill in]
 
 ### Future Work
-The team will continue 
+The team will continue working on this project in Spring of 2019 as apart of DIRECT program. Future tasks include:
+1. Increasing fuctionality of code for different substances beyond Formic Acid
+    a. Increasing the size of the library of component Raman Spectra
+2. Applying kinetic analysis to data sets to view the change in decomposition and formation of species given different boundary conditions (temperature, resonance time, and strech goal of pressure)
 
 ### Conclusion
 
