@@ -5,7 +5,7 @@ This is the unit test module for spectrafit.py
 import numpy as np
 import matplotlib.pyplot as plt
 import lmfit
-import spectrafit
+from ramannoodles import spectrafit
 
 
 # define gaussian function used to generate test data (fake spectra)
