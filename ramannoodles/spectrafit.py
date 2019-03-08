@@ -12,7 +12,7 @@ from lmfit.models import LorentzianModel
 from peakutils.baseline import baseline
 
 
-def subtract_baseline(y_data, deg=5, plot=False, x_data=None):
+def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
     """
     Function that fits a n-degree polynomial (default: n=5)
     baseline and subtracts it from the input data
