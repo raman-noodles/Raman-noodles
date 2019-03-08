@@ -1,7 +1,9 @@
 # do not track the contents of these folders
 raman_spectra/
+__pycache__/
 
 # do not track these file types
 *.jdx
 *.p
 *.ipynb_checkpoints
+.DS_Store
