@@ -31,7 +31,7 @@ def download_cas(cas_num):
         else:
             if data.status_code == 200:
                 open('../raman_spectra/'+cas_num+'_NIST_IR.jdx', 'wb').write(data.content)
-                print('file downloaded too raman_spectra folder')
+                print('file downloaded to raman_spectra folder')
             else:
                 print('Request status: {}'.format(data.status_code))
     else:
@@ -50,10 +50,10 @@ def add_jdx(filename, label=None):
     data['y'] = y_abs
     if label is None:
         shoyu_data_dict.update({data['title'].upper(): data})
-        print('{} added to shoyu_data_dict.p'.format(data['title']))
+        print('{} loaded into the dictionary - shoyu_data_dict.p'.format(data['title']))
     else:
         shoyu_data_dict.update({label: data})
-        print('{} added to shoyu_data_dict.p'.format(label))
+        print('{} loaded into the dictionary - shoyu_data_dict.p'.format(label))
     pickle.dump(shoyu_data_dict, open('../raman_spectra/shoyu_data_dict.p', 'wb'))
     return shoyu_data_dict
 
