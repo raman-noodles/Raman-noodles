@@ -4,8 +4,9 @@ lorentzian/gaussian fitting of spectra data.
 """
 
 
-from peakutils.baseline import baseline
 import matplotlib.pyplot as plt
+import peakutils
+from peakutils.baseline import baseline
 
 
 def subtract_baseline(y_data, deg=5, plot=False, x_data=None):
@@ -32,3 +33,16 @@ def subtract_baseline(y_data, deg=5, plot=False, x_data=None):
     else:
         pass
     return y_out
+
+
+def find_peaks(x_data, y_data, thres=0.25, min_dist=10):
+    """docstring"""
+    # find peaks
+    indexes = peakutils.indexes(y_data, thres=thres, min_dist=min_dist)
+    # convert peak indexes to data values
+    peaks = []
+    for i in indexes:
+        peak = (x_data[i], y_data[i])
+        peaks.append(peak)
+    peaks
+    return peaks

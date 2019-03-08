@@ -34,3 +34,12 @@ def test_subtract_baseline():
     y_data = spectrafit.subtract_baseline(Y_TEST)
     assert isinstance(y_data, np.ndarray), 'output is not a numpy array'
     assert len(y_data) == len(Y_TEST), 'output length different from input'
+
+
+def test_find_peaks():
+    """docstring"""
+    peaks = spectrafit.find_peaks(X_TEST, Y_TEST)
+    assert isinstance(peaks, list), 'expected output is list'
+    assert isinstance(peaks[0], tuple), 'first peak data is not a tuple'
+    assert min(X_TEST) <= peaks[0][0] <= max(X_TEST), '1st peak center is outside data range'
+    assert 0 <= peaks[0][1] <= 1, '1st peak maximum is outside acceptable range'
