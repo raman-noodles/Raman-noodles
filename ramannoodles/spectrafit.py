@@ -88,7 +88,7 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
     plt.ylabel('Absorbance', fontsize=14)
     plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
     plt.xlim(min(x_data), max(x_data))
-    plt.ylim(min(y_data)*-0.9, max(y_data)*1.1))
+    plt.ylim(min(y_data)*-0.9, max(y_data)*1.1)
     plt.plot(x_data, y_data, 'r', alpha=1, linewidth=2, label='data')
     plt.plot(x_data, fit_result.best_fit, 'c-', alpha=0.5, linewidth=3, label='fit')
     if plot_components:
