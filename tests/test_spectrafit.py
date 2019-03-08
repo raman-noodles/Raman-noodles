@@ -68,3 +68,19 @@ def test_model_fit():
     assert len(out.best_fit) == len (y_TEST), 'size of fit incorrect'
     assert isinstance(out.best_values, dict), 'out.best_values is not a dictionary'
     assert len(out.values) == len(pars), 'number of output values not equal to number of parameters'
+
+
+# need a unit test for plot_fit function
+
+
+def test_export_fit_data():
+    """docstring"""
+    y_TEST = spectrafit.subtract_baseline(Y_TEST)
+    peaks = spectrafit.find_peaks(X_TEST, y_TEST)
+    mod, pars = spectrafit.lorentz_params(peaks)
+    out = spectrafit.model_fit(X_TEST, y_TEST, mod, pars)
+    fit_peak_data = spectrafit.export_fit_data(out)
+    assert isinstance(fit_peak_data, list), 'output is not a list'
+    assert np.asarray(fit_peak_data).shape == (int(len(out.values)/5), 5), """
+    output is not the correct shape"""
+    assert len(fit_peak_data) == int(len(out.values)/5), 'incorrect number of peaks exported'

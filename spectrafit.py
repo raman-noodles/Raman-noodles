@@ -5,6 +5,7 @@ lorentzian/gaussian fitting of spectra data.
 
 
 import matplotlib.pyplot as plt
+import numpy as np
 import peakutils
 import lmfit
 from lmfit.models import LorentzianModel
@@ -99,3 +100,24 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
             plt.plot(x_data, comps[prefix], 'b--', linewidth=1)
     plt.legend(fontsize=12)
     plt.show()
+
+
+def export_fit_data(out):
+    """
+    fit_peak_data[i][0] = p[i]_simga
+    fit_peak_data[i][1] = p[i]_center
+    fit_peak_data[i][2] = p[i]_amplitude
+    fit_peak_data[i][3] = p[i]_fwhm
+    fit_peak_data[i][4] = p[i]_center
+    """
+    fit_peak_data = []
+    for i in range(int(len(out.values)/5)):
+        peak = np.zeros(5)
+        prefix = 'p{}_'.format(i+1)
+        peak[0] = out.values[prefix+'sigma']
+        peak[1] = out.values[prefix+'center']
+        peak[2] = out.values[prefix+'amplitude']
+        peak[3] = out.values[prefix+'fwhm']
+        peak[4] = out.values[prefix+'center']
+        fit_peak_data.append(peak)
+    return fit_peak_data
