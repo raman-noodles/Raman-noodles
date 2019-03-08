@@ -69,3 +69,14 @@ def lorentz_params(peaks):
         else:
             mod = mod + peak_list[i]
     return mod, pars
+
+
+def model_fit(x_data, y_data, mod, pars, report=False):
+    # fit model
+    init = mod.eval(pars, x=x_data)
+    out = mod.fit(y_data, pars, x=x_data)
+    if report:
+        print(out.fit_report())
+    else:
+        pass
+    return out
