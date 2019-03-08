@@ -31,6 +31,6 @@ Y_TEST = np.asarray(Y_TEST)
 
 def test_subtract_baseline():
     """docstring"""
-    y_data = spectrafit.subtract_baseline(X_TEST, Y_TEST)
-    assert isinstance(y_data, numpy.array), 'output is not a numpy array'
+    y_data = spectrafit.subtract_baseline(Y_TEST)
+    assert isinstance(y_data, np.ndarray), 'output is not a numpy array'
     assert len(y_data) == len(Y_TEST), 'output length different from input'
