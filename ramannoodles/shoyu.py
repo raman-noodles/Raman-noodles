@@ -21,8 +21,8 @@ def download_cas(cas_num):
     """
     # drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
-    if not os.path.exists('raman_spectra/'+cas_num+'_NIST_IR.jdx'):
-        os.makedirs('raman_spectra', exist_ok=True)
+    if not os.path.exists('../raman_spectra/'+cas_num+'_NIST_IR.jdx'):
+        os.makedirs('../raman_spectra', exist_ok=True)
         url = 'https://webbook.nist.gov/cgi/cbook.cgi?JCAMP=C'+cas_num+'&Index=1&Type=IR'
         data = requests.get(url, allow_redirects=True)
         if data.text == '##TITLE=Spectrum not found.\n##END=\n':
@@ -30,7 +30,7 @@ def download_cas(cas_num):
              with NIST Chemistry WebBook.""")
         else:
             if data.status_code == 200:
-                open('raman_spectra/'+cas_num+'_NIST_IR.jdx', 'wb').write(data.content)
+                open('../raman_spectra/'+cas_num+'_NIST_IR.jdx', 'wb').write(data.content)
                 print('file downloaded too raman_spectra folder')
             else:
                 print('Request status: {}'.format(data.status_code))
@@ -43,7 +43,7 @@ def add_jdx(filename, label=None):
     Function that reads and adds a .jdx file to the
     raman_data_dict pickle file.
     """
-    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
     data = jcamp.JCAMP_reader(filename)
     y_abs = 1 - data['y']
     data['yunits'] = 'ABSORBANCE'
@@ -54,7 +54,7 @@ def add_jdx(filename, label=None):
     else:
         shoyu_data_dict.update({label: data})
         print('{} added to shoyu_data_dict.p'.format(label))
-    pickle.dump(shoyu_data_dict, open('raman_spectra/shoyu_data_dict.p', 'wb'))
+    pickle.dump(shoyu_data_dict, open('../raman_spectra/shoyu_data_dict.p', 'wb'))
     return shoyu_data_dict
 
 
@@ -74,12 +74,12 @@ def initialize_standard_library():
                'acetone':'67-64-1'}
     # initialize empty shoyu_data_dict
     shoyu_data_dict = {}
-    os.makedirs('raman_spectra', exist_ok=True)
-    pickle.dump(shoyu_data_dict, open('raman_spectra/shoyu_data_dict.p', 'wb'))
+    os.makedirs('../raman_spectra', exist_ok=True)
+    pickle.dump(shoyu_data_dict, open('../raman_spectra/shoyu_data_dict.p', 'wb'))
     for item in cas_lib:
         cas_num = ''.join(cas_lib[item].split('-'))
         download_cas(cas_num)
-        add_jdx('raman_spectra/'+cas_num+'_NIST_IR.jdx', label=None)
+        add_jdx('../raman_spectra/'+cas_num+'_NIST_IR.jdx', label=None)
 
 
 def more_please(cas_num, label=None):
@@ -91,5 +91,5 @@ def more_please(cas_num, label=None):
     # Drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
     download_cas(cas_num)
-    shoyu_data_dict = add_jdx('raman_spectra/'+cas_num+'_NIST_IR.jdx', label)
+    shoyu_data_dict = add_jdx('../raman_spectra/'+cas_num+'_NIST_IR.jdx', label)
     return shoyu_data_dict
