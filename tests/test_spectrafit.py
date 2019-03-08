@@ -3,6 +3,7 @@ This is the unit test module for spectrafit.py
 """
 
 import numpy as np
+import lmfit
 import spectrafit
 
 
@@ -43,3 +44,11 @@ def test_find_peaks():
     assert isinstance(peaks[0], tuple), 'first peak data is not a tuple'
     assert min(X_TEST) <= peaks[0][0] <= max(X_TEST), '1st peak center is outside data range'
     assert 0 <= peaks[0][1] <= 1, '1st peak maximum is outside acceptable range'
+
+
+def test_lorentz_params():
+    peaks = spectrafit.find_peaks(X_TEST, Y_TEST)
+    mod, pars = spectrafit.lorentz_params(peaks)
+    assert isinstance (mod, lmfit.model.CompositeModel), 'mod is not a lmfit CompositeModel'
+    assert isinstance (pars, lmfit.parameter.Parameters), 'pars are not lmfit Parameters'
+    assert len(pars) == 5*len(peaks), 'incorrect ratio of parameters to peaks'

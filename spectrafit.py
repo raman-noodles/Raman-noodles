@@ -6,6 +6,8 @@ lorentzian/gaussian fitting of spectra data.
 
 import matplotlib.pyplot as plt
 import peakutils
+import lmfit
+from lmfit.models import LorentzianModel
 from peakutils.baseline import baseline
 
 
@@ -46,3 +48,24 @@ def find_peaks(x_data, y_data, thres=0.25, min_dist=10):
         peaks.append(peak)
     peaks
     return peaks
+
+
+def lorentz_params(peaks):
+    peak_list = []
+    for i in range(len(peaks)):
+        prefix = 'p{}_'.format(i+1)
+        peak = LorentzianModel(prefix=prefix)
+        if i == 0:
+            pars = peak.make_params()
+        else:
+            pars.update(peak.make_params())
+        pars[prefix+'center'].set(peaks[i][0], vary=True, min=(peaks[i][0]-10), max=(peaks[i][0]+10))
+        pars[prefix+'height'].set(peaks[i][1], vary=True, min=0, max=1)
+        pars[prefix+'sigma'].set(min=0, max=500)
+        pars[prefix+'amplitude'].set(min=0)
+        peak_list.append(peak)
+        if i == 0:
+            mod = peak_list[i]
+        else:
+            mod = mod + peak_list[i]
+    return mod, pars
