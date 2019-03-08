@@ -80,3 +80,22 @@ def model_fit(x_data, y_data, mod, pars, report=False):
     else:
         pass
     return out
+
+
+def plot_fit(x_data, y_data, fit_result, plot_components=False):
+    fig = plt.figure(figsize=(15,6))
+    plt.ylabel('Absorbance', fontsize=14)
+    plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
+    plt.xlim(min(x_data), max(x_data))
+    plt.ylim(-0.1, 1.1)
+    plt.plot(x_data, y_data, 'r', alpha=1, linewidth=2, label='data')
+    plt.plot(x_data, fit_result.best_fit, 'c-', alpha=0.5, linewidth=3, label='fit')
+    if plot_components:
+        comps = fit_result.eval_components(x=x_data)
+        prefix = 'p{}_'.format(1)
+        plt.plot(x_data, comps[prefix], 'b--', linewidth=1, label='peak lorentzians')
+        for i in range(1, int(len(fit_result.values)/5)):
+            prefix = 'p{}_'.format(i+1)
+            plt.plot(x_data, comps[prefix], 'b--', linewidth=1)
+    plt.legend(fontsize=12)
+    plt.show()

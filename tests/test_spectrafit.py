@@ -3,6 +3,7 @@ This is the unit test module for spectrafit.py
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 import lmfit
 import spectrafit
 
@@ -39,7 +40,8 @@ def test_subtract_baseline():
 
 def test_find_peaks():
     """docstring"""
-    peaks = spectrafit.find_peaks(X_TEST, Y_TEST)
+    y_TEST = spectrafit.subtract_baseline(Y_TEST)
+    peaks = spectrafit.find_peaks(X_TEST, y_TEST)
     assert isinstance(peaks, list), 'expected output is list'
     assert isinstance(peaks[0], tuple), 'first peak data is not a tuple'
     assert min(X_TEST) <= peaks[0][0] <= max(X_TEST), '1st peak center is outside data range'
@@ -47,7 +49,9 @@ def test_find_peaks():
 
 
 def test_lorentz_params():
-    peaks = spectrafit.find_peaks(X_TEST, Y_TEST)
+    """docstring"""
+    y_TEST = spectrafit.subtract_baseline(Y_TEST)
+    peaks = spectrafit.find_peaks(X_TEST, y_TEST)
     mod, pars = spectrafit.lorentz_params(peaks)
     assert isinstance (mod, lmfit.model.CompositeModel), 'mod is not a lmfit CompositeModel'
     assert isinstance (pars, lmfit.parameter.Parameters), 'pars are not lmfit Parameters'
@@ -55,10 +59,12 @@ def test_lorentz_params():
 
 
 def test_model_fit():
-    peaks = spectrafit.find_peaks(X_TEST, Y_TEST)
+    """docstring"""
+    y_TEST = spectrafit.subtract_baseline(Y_TEST)
+    peaks = spectrafit.find_peaks(X_TEST, y_TEST)
     mod, pars = spectrafit.lorentz_params(peaks)
-    out = spectrafit.model_fit(X_TEST, Y_TEST, mod, pars)
+    out = spectrafit.model_fit(X_TEST, y_TEST, mod, pars)
     assert isinstance(out, lmfit.model.ModelResult), 'output is not a lmfit ModelResult'
-    assert len(out.best_fit) == len (Y_TEST), 'size of fit incorrect'
+    assert len(out.best_fit) == len (y_TEST), 'size of fit incorrect'
     assert isinstance(out.best_values, dict), 'out.best_values is not a dictionary'
     assert len(out.values) == len(pars), 'number of output values not equal to number of parameters'
