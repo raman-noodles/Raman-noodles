@@ -6,8 +6,12 @@
 
 
 ### Overall Project Objective
-This package allows for the auto analysis of a mixture's Raman spectra. It compares the input mixture spectra against an individual component's spectra contained. 
-- Background and motivation for the project can be found in the [Background and Motivation Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Project-Background-and-Motivation)
+This project identifies components in a Raman spectra. Advantages to using this method are:
+1. FULLY Open source, no part of the project is dependent on a paid service
+2. AUTOMATED process, analysis is automated leading to fast results
+3. VERIFIABLE, user is made aware of how confident they can be in the results via a statistical software stack
+
+- **More detailed background and motivation for the project can be found in the [Project Background and Motivation Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Project-Background-and-Motivation)**
 
 ### Assumptions and Project Scope
 1. Baseline subtraction is beyond the scope of this project. 
@@ -23,13 +27,8 @@ The project can be thought of as broken down into 3 steps:
 
 These three sections have their own wiki documents and filled juypter notebooks with more detail included throught, see those for more detail on the individual steps.
 
-### User Flow: As a user you should follow these steps to apply Raman-Noodles to YOUR data
-#### Note: these are major steps that will walk you through the three major steps. 
-1. [need to fill in]
-
-
-### Example of Using Raman Noodles
-An example of using the software can be seen in the wiki page: [Link to Raman-Noodles Example Use Case Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Example-of-Raman-Noodle-Use)
+### User Flow and Example of Using Raman Noodles
+A user will be able to follow the steps to apply Raman-Noodles to YOUR *Formic Acid* data set. An example of using the software can be seen in the [Example Use Case Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Example-of-Raman-Noodle-Use)
 
 
 ### Future Work
@@ -40,4 +39,4 @@ The team will continue working on this project in Spring of 2019 as apart of DIR
 2. Applying kinetic analysis to data sets to view the change in decomposition and formation of species given different boundary conditions (temperature, resonance time, and strech goal of pressure)
 
 ### Conclusion
-This software has passed tests to sucessfully identify and analyze the identification of a Formic Acid mixture Raman data.
+This software has passed tests to sucessfully identify and analyze the identification of components in a Formic Acid mixture Raman data set.
