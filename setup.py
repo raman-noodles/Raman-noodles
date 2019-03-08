@@ -12,5 +12,6 @@ setup(name='ramannoodles',
       long_description=long_description,
       long_description_content_type="text/markdown",
       license='MIT',
-      packages=['ramannoodles', 'ramannoodles.tests'])
+      packages=['ramannoodles', 'ramannoodles.tests'],
       #install_requires=['numpy','']
+      zip_safe=True)
