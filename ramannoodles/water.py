@@ -29,7 +29,7 @@ def water():
     
     peak_loc = peak_loc = []
     peak_sigma = []
-    peak_ampl
+    peak_ampl = []
     for i in range(len(fit_peak_data)):
         loc = fit_peak_data[i][1]
         sigma = fit_peak_data[i][0]
