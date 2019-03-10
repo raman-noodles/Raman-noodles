@@ -12,9 +12,6 @@ def water():
     x_data = data['x']
     y_data = data['y']
 
-    data_range = max(x_data) - min(x_data)
-    data_range
-
     # detect peaks
     peaks = spectrafit.find_peaks(x_data, y_data, thres=0.25, min_dist=50)
 
