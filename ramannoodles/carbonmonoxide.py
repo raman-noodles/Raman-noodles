@@ -6,6 +6,7 @@ import os
 import peakutils
 import jcamp
 from ramannoodles import shoyu
+from ramannoodles import spectrafit
 import pickle
 
 shoyu.initialize_standard_library()
