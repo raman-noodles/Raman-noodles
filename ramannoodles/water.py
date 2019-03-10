@@ -38,4 +38,4 @@ def water():
         peak_sigma.append(sigma)
         peak_ampl.append(ampl)
 
-    return minimim, maximum, peak_sigma, peak_center, peak_ampl
+    return minimum, maximum, peak_sigma, peak_center, peak_ampl
