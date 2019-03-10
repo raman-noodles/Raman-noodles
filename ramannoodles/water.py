@@ -5,7 +5,7 @@ from ramannoodles import spectrafit
 
 def water():
     # open spectra library
-    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
 
     # extract spectra data
     data = shoyu_data_dict['WATER']
