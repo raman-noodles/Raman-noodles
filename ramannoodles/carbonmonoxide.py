@@ -11,7 +11,7 @@ import pickle
 
 shoyu.initialize_standard_library()
 # import data dict
-shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
+shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
 
 def CarbonMonoxide():
     data = shoyu_data_dict['CARBON MONOXIDE']
@@ -24,7 +24,7 @@ def CarbonMonoxide():
     # y_data = spectrafit.subtract_baseline(y_data, deg=3, plot=True, x_data=x_data)
     #print(xmin,xmax,xrange)
     # detect peaks
-    peaks = spectrafit.find_peaks(x_data, y_data)\
+    peaks = spectrafit.find_peaks(x_data, y_data)
     # assign parameters for least squares fit
     mod, pars = spectrafit.lorentz_params(peaks)
     # fit the model to the data
