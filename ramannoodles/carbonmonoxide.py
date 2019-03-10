@@ -35,8 +35,11 @@ def CarbonMonoxide():
     fit_peak_data = spectrafit.export_fit_data(out)
     # print docstring which outlines data structure
     spectrafit.export_fit_data.__doc__
+    center = [] 
+    sigma = [] 
+    amps = []
     for i in range(len(fit_peak_data)):
-        sigma = fit_peak_data[i][0]  
-        center = fit_peak_data[i][1]    
-        amplitude = fit_peak_data[i][2] 
-    return xmin,xmax,sigma,center,amplitude
+        sigma.append(fit_peak_data[i][0])
+        center.append(fit_peak_data[i][1])  
+        amps.append(fit_peak_data[i][2])
+    return xmin,xmax,sigma,center,amps
