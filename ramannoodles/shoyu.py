@@ -95,7 +95,7 @@ def more_please(cas_num, label=None):
     return shoyu_data_dict
 
 
-def combine_spectra(compound_1, compound_2):
+def combine_spectra(compound_1, compound_2, plot=False):
     """
     Function that combines two spectrum via
     interpolation and summation.
@@ -151,12 +151,13 @@ def combine_spectra(compound_1, compound_2):
     sum_combined = list(map(tuple, d.items()))
     # unzip
     x_combined, y_combined = zip(*sum_combined)
-    # plot original data and combined plot
-    plt.figure(figsize=(15,5))
-    plt.plot(x_comp1, y_comp1, 'b--', label=compound_1)
-    plt.plot(x_comp2, y_comp2, 'g--', label=compound_2)
-    plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
-    plt.legend()
-    plt.xlabel('cm$^{-1}$', fontsize=14)
-    plt.ylabel('Absoprtion', fontsize=14)
+    if plot:
+        # plot original data and combined plot
+        plt.figure(figsize=(15,5))
+        plt.plot(x_comp1, y_comp1, 'b--', label=compound_1)
+        plt.plot(x_comp2, y_comp2, 'g--', label=compound_2)
+        plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
+        plt.legend()
+        plt.xlabel('cm$^{-1}$', fontsize=14)
+        plt.ylabel('Absoprtion', fontsize=14)
     return x_combined, y_combined
