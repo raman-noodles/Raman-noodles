@@ -93,3 +93,70 @@ def more_please(cas_num, label=None):
     download_cas(cas_num)
     shoyu_data_dict = add_jdx('../raman_spectra/'+cas_num+'_NIST_IR.jdx', label)
     return shoyu_data_dict
+
+
+def combine_spectra(compound_1, compound_2):
+    """
+    Function that combines two spectrum via
+    interpolation and summation.
+    """
+    # compound 1
+    comp1 = shoyu_data_dict[compound_1]
+    x_comp1 = comp1['x']
+    y_comp1 = comp1['y']
+    y_comp1 = spectrafit.subtract_baseline(y_comp1)
+    # compound 2
+    comp2 = shoyu_data_dict[compound_2]
+    x_comp2 = comp2['x']
+    y_comp2 = comp2['y']
+    y_comp2 = spectrafit.subtract_baseline(y_comp2)
+    # zip x and y values
+    comp1_data = list(zip(x_comp1, y_comp1))
+    comp2_data = list(zip(x_comp2, y_comp2))
+    #clean comp1
+    comp1_data_clean = []
+    for i in range(1, len(comp1_data)-1):
+        if comp1_data[i][0] == comp1_data[i-1][0]:
+            pass
+        else:
+            comp1_data_clean.append(comp1_data[i])
+    # clean comp2
+    comp2_data_clean = []
+    for i in range(1, len(comp2_data)-1):
+        if comp2_data[i][0] == comp2_data[i-1][0]:
+            pass
+        else:
+            comp2_data_clean.append(comp2_data[i])
+    # unzip values
+    x_comp1, y_comp1 = zip(*comp1_data_clean)
+    x_comp2, y_comp2 = zip(*comp2_data_clean)
+    # interpolate data
+    comp1_int = interpolate.interp1d(x_comp1, y_comp1, kind='cubic')
+    comp2_int = interpolate.interp1d(x_comp2, y_comp2, kind='cubic')
+    # define ranges
+    comp1_range = np.arange(int(min(x_comp1))+1, int(max(x_comp1)), 1)
+    comp2_range = np.arange(int(min(x_comp2))+1, int(max(x_comp2)), 1)
+    # run interpolations
+    y_comp1_interp = comp1_int(comp1_range)
+    y_comp2_interp = comp2_int(comp2_range)
+    # zip interpolated values
+    comp1_data_int = list(zip(comp1_range, y_comp1_interp))
+    comp2_data_int = list(zip(comp2_range, y_comp2_interp))
+    # add the two spectra
+    combined = sorted(comp1_data_int + comp2_data_int)
+    # add by like
+    d = {x:0 for x,_ in combined}
+    for name,num in combined:
+        d[name] += num
+    sum_combined = list(map(tuple, d.items()))
+    # unzip
+    x_combined, y_combined = zip(*sum_combined)
+    # plot original data and combined plot
+    plt.figure(figsize=(15,5))
+    plt.plot(x_comp1, y_comp1, 'b--', label=compound_1)
+    plt.plot(x_comp2, y_comp2, 'g--', label=compound_2)
+    plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
+    plt.legend()
+    plt.xlabel('cm$^{-1}$', fontsize=14)
+    plt.ylabel('Absoprtion', fontsize=14)
+    return x_combined, y_combined
