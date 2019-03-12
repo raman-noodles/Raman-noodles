@@ -12,6 +12,10 @@ import os
 import pickle
 import jcamp
 import requests
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import interpolate
+from ramannoodles import spectrafit
 
 
 def download_cas(cas_num):
@@ -101,14 +105,12 @@ def combine_spectra(compound_1, compound_2, plot=False):
     interpolation and summation.
     """
     # compound 1
-    comp1 = shoyu_data_dict[compound_1]
-    x_comp1 = comp1['x']
-    y_comp1 = comp1['y']
+    x_comp1 = compound_1['x']
+    y_comp1 = compound_1['y']
     y_comp1 = spectrafit.subtract_baseline(y_comp1)
     # compound 2
-    comp2 = shoyu_data_dict[compound_2]
-    x_comp2 = comp2['x']
-    y_comp2 = comp2['y']
+    x_comp2 = compound_2['x']
+    y_comp2 = compound_2['y']
     y_comp2 = spectrafit.subtract_baseline(y_comp2)
     # zip x and y values
     comp1_data = list(zip(x_comp1, y_comp1))
@@ -151,11 +153,14 @@ def combine_spectra(compound_1, compound_2, plot=False):
     sum_combined = list(map(tuple, d.items()))
     # unzip
     x_combined, y_combined = zip(*sum_combined)
+    # set as arrays
+    x_combined = np.asarray(x_combined)
+    y_combined = np.asarray(y_combined)
     if plot:
         # plot original data and combined plot
         plt.figure(figsize=(15,5))
-        plt.plot(x_comp1, y_comp1, 'b--', label=compound_1)
-        plt.plot(x_comp2, y_comp2, 'g--', label=compound_2)
+        plt.plot(x_comp1, y_comp1, 'b--', label=compound_1['title'])
+        plt.plot(x_comp2, y_comp2, 'g--', label=compound_2['title'])
         plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
         plt.legend()
         plt.xlabel('cm$^{-1}$', fontsize=14)

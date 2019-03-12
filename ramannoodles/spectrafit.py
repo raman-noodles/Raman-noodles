@@ -132,19 +132,18 @@ def compound_report(compound):
     within spectrafit to give the peak locations of a compound
     in shoyu_data_dict.p
     """
-    data = shoyu_data_dict[compound]
-    x_data = data['x']
-    y_data = data['y']
+    x_data = compound['x']
+    y_data = compound['y']
     # subtract baseline
-    y_data = spectrafit.subtract_baseline(y_data)
+    y_data = subtract_baseline(y_data)
     # detect peaks
-    peaks, peak_list = spectrafit.peak_detect(x_data, y_data)
+    peaks, peak_list = peak_detect(x_data, y_data)
     # assign parameters for least squares fit
-    mod, pars = spectrafit.lorentz_params(peaks)
+    mod, pars = lorentz_params(peaks)
     # fit the model to the data
-    out = spectrafit.model_fit(x_data, y_data, mod, pars)
+    out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
-    fit_peak_data = spectrafit.export_fit_data(out)
+    fit_peak_data = export_fit_data(out)
     peak_centers = []
     for i in range(len(fit_peak_data)):
         peak_centers.append(fit_peak_data[i][1])
@@ -154,15 +153,15 @@ def compound_report(compound):
 def data_report(x_data, y_data):
     """docstring"""
     # subtract baseline
-    y_data = spectrafit.subtract_baseline(y_data)
+    y_data = subtract_baseline(y_data)
     # detect peaks
-    peaks, peak_list = spectrafit.peak_detect(x_data, y_data)
+    peaks, peak_list = peak_detect(x_data, y_data)
     # assign parameters for least squares fit
-    mod, pars = spectrafit.lorentz_params(peaks)
+    mod, pars = lorentz_params(peaks)
     # fit the model to the data
-    out = spectrafit.model_fit(x_data, y_data, mod, pars)
+    out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
-    fit_peak_data = spectrafit.export_fit_data(out)
+    fit_peak_data = export_fit_data(out)
     peak_centers = []
     for i in range(len(fit_peak_data)):
         peak_centers.append(fit_peak_data[i][1])
