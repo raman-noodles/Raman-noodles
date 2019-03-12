@@ -32,7 +32,7 @@ def compound_report(compound):
         peak_sigma.append(fit_peak_data[i][0])
         peak_centers.append(fit_peak_data[i][1])
         peak_ampl.append(fit_peak_data[i][2])
-    return xmin,xmax,peak_centers,peak_sigma,peak_ampl
+    return peak_centers,peak_sigma,peak_ampl,xmin,xmax
 
 def data_report(x_data, y_data):
     xmin = min(x_data)
