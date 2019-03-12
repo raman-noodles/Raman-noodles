@@ -149,3 +149,21 @@ def compound_report(compound):
     for i in range(len(fit_peak_data)):
         peak_centers.append(fit_peak_data[i][1])
     return peak_centers
+
+
+def data_report(x_data, y_data):
+    """docstring"""
+    # subtract baseline
+    y_data = spectrafit.subtract_baseline(y_data)
+    # detect peaks
+    peaks, peak_list = spectrafit.peak_detect(x_data, y_data)
+    # assign parameters for least squares fit
+    mod, pars = spectrafit.lorentz_params(peaks)
+    # fit the model to the data
+    out = spectrafit.model_fit(x_data, y_data, mod, pars)
+    # export data in logical structure (see docstring)
+    fit_peak_data = spectrafit.export_fit_data(out)
+    peak_centers = []
+    for i in range(len(fit_peak_data)):
+        peak_centers.append(fit_peak_data[i][1])
+    return peak_centers
