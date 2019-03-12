@@ -5,6 +5,7 @@ This is the unit test module for spectrafit.py
 import numpy as np
 import matplotlib.pyplot as plt
 import lmfit
+import pickle
 from ramannoodles import spectrafit
 
 
@@ -29,6 +30,9 @@ Y_TEST = gauss1 + gauss2 + gauss3 + gauss4 + gauss5 + gauss6
 # normalize test spectra
 Y_TEST = [(Y_TEST[i] - min(Y_TEST))/(max(Y_TEST)-min(Y_TEST)) for i in range(len(Y_TEST))]
 Y_TEST = np.asarray(Y_TEST)
+
+# open spectra library
+shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
 
 
 def test_subtract_baseline():
@@ -84,3 +88,11 @@ def test_export_fit_data():
     assert np.asarray(fit_peak_data).shape == (int(len(out.values)/5), 5), """
     output is not the correct shape"""
     assert len(fit_peak_data) == int(len(out.values)/5), 'incorrect number of peaks exported'
+    
+
+def test_compound_report():
+    """docstring"""
+    compound = shoyu_data_dict['WATER']
+    data = spectrafit.compound_report(compound)
+    assert len(data) == 5, 'more values in return than expected'
+    assert len(data[0]) == 3, 'more than three peaks detected for WATER'

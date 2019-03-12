@@ -126,7 +126,7 @@ def export_fit_data(out):
     return fit_peak_data
 
 
-def compound_report(compound,index):
+def compound_report(compound):
     """
     Wrapper fucntion that utilizes many of the functions
     within spectrafit to give the peak locations of a compound
@@ -151,7 +151,9 @@ def compound_report(compound,index):
         peak_sigma.append(fit_peak_data[i][0])
         peak_centers.append(fit_peak_data[i][1])
         peak_ampl.append(fit_peak_data[i][2])
-    return peak_centers,peak_sigma,peak_ampl,xmin,xmax
+    xmin = min(x_data)
+    xmax = max(x_data)
+    return peak_centers, peak_sigma, peak_ampl, xmin, xmax
 
 def data_report(x_data, y_data):
     """docstring"""
@@ -172,4 +174,6 @@ def data_report(x_data, y_data):
         peak_sigma.append(fit_peak_data[i][0])
         peak_centers.append(fit_peak_data[i][1])
         peak_ampl.append(fit_peak_data[i][2])
-    return peak_centers,peak_sigma,peak_ampl,xmin,xmax
+    xmin = min(x_data)
+    xmax = max(x_data)
+    return peak_centers, peak_sigma, peak_ampl, xmin, xmax
