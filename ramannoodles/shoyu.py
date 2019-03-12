@@ -20,8 +20,20 @@ from ramannoodles import spectrafit
 
 def download_cas(cas_num):
     """
-    Function that saves raman data
-    downloaded from NIST webpage.
+    Function that saves raman data downloaded from NIST webpage.
+
+	Function Input Parameters:
+		cas_num - string
+			The CAS number associated with the compound that is intended to be downloaded. 
+			It must be in the format of a string, but it is insensitive to having hyphens.
+
+	Function Returns:
+		This function has no returns. 
+
+    Notes: This function is meant to be an internal function to this module, and is not intended to be interacted with by 
+the user, though it is not specifically problematic if it is. It is called by two other functions, the 
+`intialize_standard_library` and `more_please` functions.  
+
     """
     # drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
@@ -44,8 +56,18 @@ def download_cas(cas_num):
 
 def add_jdx(filename, label=None):
     """
-    Function that reads and adds a .jdx file to the
-    raman_data_dict pickle file.
+    Function that reads and adds a .jdx file to the raman_data_dict pickle file.
+	Function Input Parameters:
+		filename - string
+			This filename is the exact file name that is affiliated with the .jdx file that has been
+			downloaded that the user wants to add to their pickle file. 
+	Function Returns:
+		shoyu_data_dict - dictionary
+			This is the dictionary that contains the data loaded from the pickle file and is the 
+			common way in which the user interacts with data.
+
+    Notes: As with the `download_cas` function, this is not intended to be a user-interactable function.
+
     """
     shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
     data = jcamp.JCAMP_reader(filename)
