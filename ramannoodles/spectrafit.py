@@ -129,7 +129,7 @@ def export_fit_data(out):
 def compound_report(compound):
     """
     Wrapper fucntion that utilizes many of the functions
-    within spectrafit to give the peak locations of a compound
+    within spectrafit to give the peak information of a compound
     in shoyu_data_dict.p
     """
     x_data = compound['x']
@@ -156,7 +156,12 @@ def compound_report(compound):
     return peak_centers, peak_sigma, peak_ampl, xmin, xmax
 
 def data_report(x_data, y_data):
-    """docstring"""
+    """
+    Wrapper fucntion that utilizes many of the functions
+    within spectrafit to give the peak information of inputted x
+    and y data that have been initialized beforehand
+    in shoyu_data_dict.p
+    """
     # subtract baseline
     y_data = subtract_baseline(y_data)
     # detect peaks
