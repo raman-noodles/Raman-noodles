@@ -6,10 +6,10 @@ lorentzian/gaussian fitting of spectra data.
 
 import matplotlib.pyplot as plt
 import numpy as np
-import peakutils
 import lmfit
 from lmfit.models import LorentzianModel
 from peakutils.baseline import baseline
+from scipy.signal import find_peaks
 
 
 def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
@@ -38,20 +38,21 @@ def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
     return y_out
 
 
-def find_peaks(x_data, y_data, thres=0.25, min_dist=10):
+def peak_detect(x_data, y_data, height=0.1, prominence=0.1, distance=10):
     """docstring"""
     # find peaks
-    indexes = peakutils.indexes(y_data, thres=thres, min_dist=min_dist)
+    peak_list = find_peaks(y_data, height=height, prominence=prominence, distance=distance)
     # convert peak indexes to data values
     peaks = []
-    for i in indexes:
+    for i in peak_list[0]:
         peak = (x_data[i], y_data[i])
         peaks.append(peak)
     peaks
-    return peaks
+    return peaks, peak_list
 
 
 def lorentz_params(peaks):
+    """docstring"""
     peak_list = []
     for i in range(len(peaks)):
         prefix = 'p{}_'.format(i+1)
@@ -73,6 +74,7 @@ def lorentz_params(peaks):
 
 
 def model_fit(x_data, y_data, mod, pars, report=False):
+    """docstring"""
     # fit model
     init = mod.eval(pars, x=x_data)
     out = mod.fit(y_data, pars, x=x_data)
@@ -84,6 +86,7 @@ def model_fit(x_data, y_data, mod, pars, report=False):
 
 
 def plot_fit(x_data, y_data, fit_result, plot_components=False):
+    """docstring"""
     fig = plt.figure(figsize=(15,6))
     plt.ylabel('Absorbance', fontsize=14)
     plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
@@ -108,7 +111,7 @@ def export_fit_data(out):
     fit_peak_data[i][1] = p[i]_center
     fit_peak_data[i][2] = p[i]_amplitude
     fit_peak_data[i][3] = p[i]_fwhm
-    fit_peak_data[i][4] = p[i]_center
+    fit_peak_data[i][4] = p[i]_height
     """
     fit_peak_data = []
     for i in range(int(len(out.values)/5)):
@@ -118,6 +121,31 @@ def export_fit_data(out):
         peak[1] = out.values[prefix+'center']
         peak[2] = out.values[prefix+'amplitude']
         peak[3] = out.values[prefix+'fwhm']
-        peak[4] = out.values[prefix+'center']
+        peak[4] = out.values[prefix+'height']
         fit_peak_data.append(peak)
     return fit_peak_data
+
+
+def compound_report(compound):
+    """
+    Wrapper fucntion that utilizes many of the functions
+    within spectrafit to give the peak locations of a compound
+    in shoyu_data_dict.p
+    """
+    data = shoyu_data_dict[compound]
+    x_data = data['x']
+    y_data = data['y']
+    # subtract baseline
+    y_data = spectrafit.subtract_baseline(y_data)
+    # detect peaks
+    peaks, peak_list = spectrafit.peak_detect(x_data, y_data)
+    # assign parameters for least squares fit
+    mod, pars = spectrafit.lorentz_params(peaks)
+    # fit the model to the data
+    out = spectrafit.model_fit(x_data, y_data, mod, pars)
+    # export data in logical structure (see docstring)
+    fit_peak_data = spectrafit.export_fit_data(out)
+    peak_centers = []
+    for i in range(len(fit_peak_data)):
+        peak_centers.append(fit_peak_data[i][1])
+    return peak_centers
