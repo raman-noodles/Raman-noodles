@@ -2,7 +2,13 @@ import matplotlib.pyplot as plt
 import pickle
 from ramannoodles import spectrafit
 
+
+
+
 def compound_report(compound):
+    # open spectra library
+    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    # extract data from spectra library
     data = shoyu_data_dict[compound]
     x_data = data['x']
     y_data = data['y']
