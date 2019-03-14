@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -12,6 +12,6 @@ setup(name='ramannoodles',
       long_description=long_description,
       long_description_content_type="text/markdown",
       license='MIT',
-      packages=['ramannoodles', 'ramannoodles.tests'],
+      packages=['ramannoodles'],
       #install_requires=['numpy','']
       zip_safe=True)
