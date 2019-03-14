@@ -1,6 +1,10 @@
 """
-This module allows for baseline subtraction, peak detection, and
-lorentzian/gaussian fitting of spectra data.
+This module allows for baseline subtraction using polynomial subtraction at a user-specified
+degree, peak detection using scipy.signal find_peaks module, and then utilizes 
+lorentzian/gaussian fitting of spectra data, enabling extraction of full-width, half-max
+peak data.
+
+Developed by the Raman-Noodles team.
 """
 
 
@@ -14,8 +18,26 @@ from scipy.signal import find_peaks
 
 def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
     """
-    Function that fits a n-degree polynomial (default: n=5)
-    baseline and subtracts it from the input data
+    Function that fits an n-degree polynomial (default: n = 3) baseline to the spectral data,
+    and subtracts it from the input data.
+
+    	Function Input Parameters:
+		y_data - numpy array
+			The intensity data of the spectra to be baselined. 
+		deg - integer (Optional)
+			Integer value for the degree of the polynomial to be used to baseline data.
+			The value defaults to 3 if no value is specified.
+		plot - Boolean (Optional)
+			Boolean value that indicates whether or not to plot the baselined and 
+			original data. If true, it plots both spectra on the same plot. Note that 
+			if the user wants plotting functionality, x_data must be provided.
+		x_data - numpy array (Optional)
+			The x-values associated with the y_data that is being baselined. 
+			These values are only needed for the function if the user desires plotting.
+
+	Function Return Parameters:
+		y_out - numpy array
+			The baselined values of the y-axis. 
     """
     y_base = baseline(y_data, deg=deg, max_it=200)
     # to avoid strange results,
