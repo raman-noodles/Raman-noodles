@@ -146,8 +146,21 @@ def combine_spectra(compound_1, compound_2, plot=False):
     """
     Function that combines two spectrum via interpolation and summation.
     
+    	Function Input Parameters:
+		compound_1 - dictionary key and set of associated values
+			The first of the two compound spectra that it is desired to combine. The ordering between the
+			two input compounds is not strictly speaking important - the output will be identical either way.
+		compound_2 - dictionary key and set of associated values
+			The second of the two compound spectra that it is desired to combine. 
+		plot - Boolean (Optional)
+			This argument is used to dictate whether or not you would like to output a plot which shows the 
+			combined spectra, as well as the two original spectra, overlaid on the same plot. Defaults to False.
 
-
+	Function Returns:
+		x_combined - numpy array
+			The x-values of the new spectra that contains the combined values of the two spectra that were input.
+		y_combined - numpy array
+			The y-values of the new spectra that contains the combined values of the two spectra that were input.
 
     """
     # compound 1
