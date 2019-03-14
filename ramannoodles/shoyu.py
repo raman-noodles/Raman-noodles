@@ -64,7 +64,7 @@ def add_jdx(filename, label=None):
 	Function Returns:
 		shoyu_data_dict - dictionary
 			This is the dictionary that contains the data loaded from the pickle file and is the 
-			common way in which the user interacts with data.
+			common way in which the user interacts with data in this software.
 
     Notes: As with the `download_cas` function, this is not intended to be a user-interactable function.
 
@@ -86,9 +86,15 @@ def add_jdx(filename, label=None):
 
 def initialize_standard_library():
     """
-    Function that downloads a standard library of raman spectra
-    from the NIST Chemistry WebBook. It generates a folder and a
-    pickle file for storing data for future use.
+    Function that downloads a standard library of raman spectra from the NIST Chemistry WebBook. It generates a 
+    folder and a pickle file for storing data for future use.
+
+    	Function Input Parameters: This function does not take input parameters
+
+    	Function Returns: This function has no returns.
+
+    Notes: This function must be run BEFORE any other function in this package, as all the other packages 
+    assume the presence of the folder created by this function. 
     """
     # dictionary of CAS registry numbers for standard library
     cas_lib = {'water':'7732-18-5',
@@ -113,6 +119,21 @@ def more_please(cas_num, label=None):
     Function that downloads a spectra from the NIST
     database, adds it to shoyu_data_dict, pickles shoyu_data_dict
     and returns the updated shoyu_data_dict.
+    
+    	Function Input Parameters: 
+		cas_num - string
+			The CAS number that is associated with the compound intended to be downloaded
+			It must be in the format of a string, but it is insensitive to hyphens.
+		label - string (Optional)
+			By passing this label, instead of using the title found on the NIST webbook, when 
+			the compound spectral data is added to the shoyu_data_dict it will use the text of
+			`label` as the dictionary key for this spectral data. 
+
+	Function Returns:
+		shoyu_data_dict - Dictionary
+			This is the dictionary that contains the data loaded from the pickle file, and is
+			the common way in which the user interacts with data in this software.
+
     """
     # Drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
@@ -123,8 +144,11 @@ def more_please(cas_num, label=None):
 
 def combine_spectra(compound_1, compound_2, plot=False):
     """
-    Function that combines two spectrum via
-    interpolation and summation.
+    Function that combines two spectrum via interpolation and summation.
+    
+
+
+
     """
     # compound 1
     x_comp1 = compound_1['x']
