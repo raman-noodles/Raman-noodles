@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -8,10 +8,8 @@ setup(name='ramannoodles',
       description='A python package for analyzing raman spectroscopy data.',
       url='https://github.com/raman-noodles/Raman-noodles',
       author='Raman Noodles Group, University of Washington (2019)',
-      #author_email=
       long_description=long_description,
       long_description_content_type="text/markdown",
       license='MIT',
-      packages=['ramannoodles', 'ramannoodles.tests'],
+      packages=['ramannoodles'])
       #install_requires=['numpy','']
-      zip_safe=True)

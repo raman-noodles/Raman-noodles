@@ -14,10 +14,11 @@ This project identifies components in a Raman spectra. Advantages to using this 
 - **More detailed background and motivation for the project can be found in the [Project Background and Motivation Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Project-Background-and-Motivation)**
 
 ### Assumptions and Project Scope
-1. Baseline subtraction is beyond the scope of this project. 
-- Assumed that input mixture data has already been properly baseline subtracted
-2. Storing data library that is beyond the components of Formic Acid (Hydrogen, Water, Carbon dioxide, Carbon monoxide) are not included as other components are beyond the scope of the project at this time.
-- Assumed that the user is trying to analyze Formic Acid, or a mixture that consists only of: Formic Acid, Hydrogen, Water, Carbon dioxide, Carbon monoxide.
+1. Storing data library that is beyond the decomposition products of formic acid (hydrogen, water, carbon dioxide, carbon monoxide) are not included as other components are beyond the scope of the project at this time.
+- Assumed that the user is trying to analyze the decomposition products of formic acid, or a mixture that consists only of: Formic Acid, Hydrogen, Water, Carbon dioxide, Carbon monoxide.
+2. This project will not be predictive - that is, it will require the user to specifically input what potential compounds will be 
+present in the spectra to be analyzed. This list does not have to be exhaustive; however, the more inclusive the list, the better
+the fitting and predicting results will be. 
 
 ### Project Breakdown
 The project can be thought of as broken down into 3 steps:
@@ -39,4 +40,4 @@ The team will continue working on this project in Spring of 2019 as apart of DIR
 2. Applying kinetic analysis to data sets to view the change in decomposition and formation of species given different boundary conditions (temperature, resonance time, and strech goal of pressure)
 
 ### Conclusion
-This software has passed tests to sucessfully identify and analyze the identification of components in a Formic Acid mixture Raman data set.
+This software has passed tests to sucessfully identify and analyze the identification of components in a formic acid mixture Raman data set.
