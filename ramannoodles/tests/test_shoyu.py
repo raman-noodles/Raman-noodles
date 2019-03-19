@@ -1,5 +1,5 @@
 """
-Tests for functions in the shoyu.py module
+Test functions for the shoyu.py module
 """
 
 import os
@@ -10,7 +10,10 @@ from ramannoodles import shoyu
 shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
 
 def test_download_cas():
-    """docstring"""
+    """
+    Test function that confirms that the raman_spectra/ directory exists/was created,
+    and confirms that the .jdx file was saved with the correct filename.
+    """
     # CAS registry number for water
     cas_num = '7732-18-5'
     shoyu.download_cas(cas_num)
@@ -19,25 +22,34 @@ def test_download_cas():
     
     
 def test_add_jdx():
-    """docstring"""
+    """
+    Test function that confirms that custom labeling is successful when updating shoyu_data_dict.p,
+    and that the y units are correctly converted to ABSORBANCE instead of the default TRANSMITTENCE.
+    """
     # .jdx file containing water data
     filename = '7732185_NIST_IR.jdx'
     shoyu_data_dict = shoyu.add_jdx('raman_spectra/'+filename, label='Water_label_test')
-    assert os.path.isfile('raman_spectra/'+filename), 'File not found'
-    assert 'Water_label_test' in shoyu_data_dict, 'custom label not applied sucessfully'
-    water = shoyu_data_dict['WATER']
+    assert 'Water_label_test' in shoyu_data_dict, 'custom label not applied successfully'
+    water = shoyu_data_dict['Water_label_test']
     assert water['yunits'] == 'ABSORBANCE', 'Incorrect y units stored'
 
     
 def test_initialize_standard_library():
-    """docstring"""
+    """
+    Test function that confirms the raman_spectra/ directory is created, the .jdx files are downloaded
+    and stored correctly, and that the shoyu_data_dict.p file is generated.
+    """
     shoyu.initialize_standard_library()
     assert os.path.isdir('raman_spectra/'), 'Directory not found'
-    assert os.path.isfile('raman_spectra/shoyu_data_dict.p'), 'file not found'
+    assert os.path.isfile('raman_spectra/7732185_NIST_IR.jdx'), 'file not saved correctly'
+    assert os.path.isfile('raman_spectra/shoyu_data_dict.p'), 'shoyu_data_dict.p not found'
     
     
 def test_more_please():
-    """docstring"""
+    """
+    Test function that confirms that the pentane .jdx file was downloaded correctly and was
+    successfully added to shoyu_data_dict.p
+    """
     # CAS registry number for pentane
     cas_num = '109-66-0'
     shoyu_data_dict = shoyu.more_please(cas_num)
@@ -46,7 +58,11 @@ def test_more_please():
     
     
 def test_combine_spectra():
-    """docstring"""
+    """
+    Test function that confirms that the two compounds from shoyu_data_dict.p were combined sucessfully,
+    that the output data has the correct shape, and that the output range is within the overall
+    range of the two individual compounds.
+    """
     compound_1 = shoyu_data_dict['WATER']
     compound_2 = shoyu_data_dict['CARBON MONOXIDE']
     data = shoyu.combine_spectra(compound_1, compound_2)
