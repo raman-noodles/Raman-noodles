@@ -14,6 +14,28 @@ from ramannoodles import shoyu
 
 def peak_assignment(unknown_x, unknown_y, known_compound_list, precision = 0.03, plot = True):
     """This function is a wrapper function from which all classification of peaks occurs."""
+ 
+    #Handling errors in inputs.
+    if not isinstance(unknown_x,  list):
+        raise TypeError("Passed value of `unknown_x` is not a list! Instead, it is: " + str(type(unknown_x)))
+    
+    if not isinstance(unknown_y,  list):
+        raise TypeError("Passed value of `unknown_y` is not a list! Instead, it is: " + str(type(unknown_y)))
+    
+    if not isinstance(known_compound_list,  list):
+        raise TypeError("Passed value of `known_compound_list` is not a list! Instead, it is: " + str(type(known_compound_list)))
+    
+    #Now we need to check the elements within the known_compound_list to make sure they are correct. 
+    for i in range(len(known_compound_list)):
+        if not isinstance(known_compound_list[i],  dict):
+            raise TypeError("Passed value within `known_compound_list` is not a dictionary! Instead, it is: " + str(type(known_compound_list[i])))
+    
+    if not isinstance(precision,  [float, int]):
+        raise TypeError("Passed value of `precision` is not a float or int! Instead, it is: " + str(type(precision)))
+    
+    if not isinstance(plot,  bool):
+        raise TypeError("Passed value of `plot` is not a Boolean! Instead, it is: " + str(type(plot)))
+    
     #Lets identify the peaks in the unknown spectrum.
     unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
 
@@ -43,6 +65,16 @@ def peak_assignment(unknown_x, unknown_y, known_compound_list, precision = 0.03,
 def compare_unknown_to_known(combined_peaks, known_peaks, precision):
     """This function takes in peak positions for the spectrum to be analyzed and a single known compound and
     determines if the peaks found in the known compound are present in the unknown spectrum."""
+    #Handling errors in inputs.
+    if not isinstance(combined_peaks,  list):
+        raise TypeError("Passed value of `combined_peaks` is not a list! Instead, it is: " + str(type(combined_peaks)))
+    
+    if not isinstance(known_peaks,  list):
+        raise TypeError("Passed value of `known_peaks` is not a list! Instead, it is: " + str(type(known_peaks)))
+    
+    if not isinstance(precision,  [float, int]):
+        raise TypeError("Passed value of `precision` is not a float or int! Instead, it is: " + str(type(precision)))
+    
     assignment_matrix = np.zeros(len(combined_peaks))
     peaks_found = 0
     for i in range(len(combined_peaks)):
@@ -65,6 +97,25 @@ def compare_unknown_to_known(combined_peaks, known_peaks, precision):
 def peak_position_comparisons(unknown_peaks, known_compound_peaks, known_compound_list, association_matrix):
     """This function takes in an association matrix and turns the numbers given by said matrix into
     a text label."""
+    
+    #Handling errors in inputs.
+    if not isinstance(unknown_peaks,  list):
+        raise TypeError("Passed value of `unknown_peaks` is not a list! Instead, it is: " + str(type(unknown_peaks)))
+    
+    if not isinstance(known_compound_peaks,  list):
+        raise TypeError("Passed value of `known_compound_peaks` is not a list! Instead, it is: " + str(type(known_compound_peaks)))
+    
+    if not isinstance(known_compound_list,  list):
+        raise TypeError("Passed value of `known_compound_list` is not a list! Instead, it is: " + str(type(known_compound_list)))
+    
+    #Now we need to check the elements within the known_compound_list to make sure they are correct. 
+    for i in range(len(known_compound_list)):
+        if not isinstance(known_compound_list[i],  dict):
+            raise TypeError("Passed value within `known_compound_list` is not a dictionary! Instead, it is: " + str(type(known_compound_list[i])))
+    
+    if not isinstance(association_matrix, list):
+        raise TypeError("Passed value of `association_matrix` is not a float or int! Instead, it is: " + str(type(association_matrix)))
+    
     unknown_peak_assignment = []
     #Step through the unknown peaks to make an assignment for each unknown peak.
 
@@ -85,6 +136,22 @@ def peak_position_comparisons(unknown_peaks, known_compound_peaks, known_compoun
 def percentage_of_peaks_found(known_peaks, association_matrix, list_of_known_compounds):
     """This function takes in a list of classified peaks, and returns a percentage of how many of the material's
     peaks are found in the unknown spectrum. This can be used as a metric of confidence."""
+    
+    #Handle bad inputs
+    if not isinstance(known_peaks,  list):
+        raise TypeError("Passed value of `known_peaks` is not a list! Instead, it is: " + str(type(known_peaks)))
+    
+    if not isinstance(list_of_known_compounds,  list):
+        raise TypeError("Passed value of `list_of_known_compounds` is not a list! Instead, it is: " + str(type(list_of_known_compounds)))
+    
+    #Now we need to check the elements within the list_of_known_compounds to make sure they are correct. 
+    for i in range(len(list_of_known_compounds)):
+        if not isinstance(list_of_known_compounds[i],  dict):
+            raise TypeError("Passed value within `list_of_known_compounds` is not a dictionary! Instead, it is: " + str(type(list_of_known_compounds[i])))
+    
+    if not isinstance(association_matrix, list):
+        raise TypeError("Passed value of `association_matrix` is not a float or int! Instead, it is: " + str(type(association_matrix)))
+    
     percentage_dict = {}
     for i in range(len(list_of_known_compounds)):
         count_number = sum(association_matrix[i])
@@ -96,6 +163,25 @@ def percentage_of_peaks_found(known_peaks, association_matrix, list_of_known_com
 def plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, unknown_peak_assignments):
     """This function plots a set of unknown peaks, and plots the assigned classification given by
     the functions within peakassignment"""
+    
+    #Handling errors in inputs.
+    if not isinstance(unknown_peaks,  list):
+        raise TypeError("Passed value of `unknown_peaks` is not a list! Instead, it is: " + str(type(unknown_peaks)))
+    
+    if not isinstance(unknown_x,  list):
+        raise TypeError("Passed value of `unknown_x` is not a list! Instead, it is: " + str(type(unknown_x)))
+    
+    if not isinstance(unknown_y,  list):
+        raise TypeError("Passed value of `unknown_y` is not a list! Instead, it is: " + str(type(unknown_y)))
+    
+    #Now we need to check the elements within the unknown_peak_assignment to make sure they are correct. 
+    for i in range(len(unknown_peak_assignment)):
+        if not isinstance(unknown_peak_assignment[i],  str):
+            raise TypeError("Passed value within `unknown_peak_assignment` is not a string! Instead, it is: " + str(type(unknown_peak_assignment[i])))
+    
+    if not isinstance(association_matrix, list):
+        raise TypeError("Passed value of `association_matrix` is not a float or int! Instead, it is: " + str(type(association_matrix)))
+    
     colors = ['b', 'r', 'g', 'c', 'm', 'y', 'b']
     fig = plt.figure(figsize = (10,4), dpi = 300)
     plt.plot(unknown_x, unknown_y, color = 'black', label = 'Unknown Spectrum')
