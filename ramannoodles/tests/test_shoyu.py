@@ -56,6 +56,21 @@ def test_more_please():
     assert os.path.isfile('raman_spectra/109660_NIST_IR.jdx'), 'file not found'
     assert 'N-PENTANE' in shoyu_data_dict, 'N-PENTANTE not successfully added to shoyu_data_dict'
 
+    
+def test_clean_spectra():
+    """
+    docstring
+    """
+    compound = shoyu_data_dict['WATER']
+    comp_data_clean = shoyu.clean_spectra(compound)
+    assert isinstance(comp_data_clean, list), 'output type not a list'
+    assert len(comp_data_clean) < len(compound['x']), 'repeat data points were not removed'
+    
+    
+# def test_interpolate_spectra():
+#     compound = shoyu_data_dict['WATER']
+#     comp_data_clean = shoyu.clean_spectra(compound)
+#     comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
 
 def test_combine_spectra():
     """
