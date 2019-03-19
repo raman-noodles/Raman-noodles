@@ -20,20 +20,16 @@ from ramannoodles import spectrafit
 
 def download_cas(cas_num):
     """
-    Function that saves raman data downloaded from NIST webpage.
+    Function that saves raman data downloaded from NIST webpage
+    by calling the CAS registry number for the compound.
 
-    Function Input Parameters:
-        cas_num - string
-            The CAS number associated with the compound that is intended to be downloaded. 
-            It must be in the format of a string, but it is insensitive to having hyphens.
+    Args:
+        cas_num (str): The CAS number associated with the compound
+                       that is intended to be downloaded.
+                       It is insensitive to hyphens.
 
-	Function Returns:
-		This function has no returns. 
-
-    Notes: This function is meant to be an internal function to this module, and is not intended to be interacted with by 
-the user, though it is not specifically problematic if it is. It is called by two other functions, the 
-`intialize_standard_library` and `more_please` functions.  
-
+    Returns:
+        This function has no returns.
     """
     # drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
@@ -57,17 +53,15 @@ the user, though it is not specifically problematic if it is. It is called by tw
 def add_jdx(filename, label=None):
     """
     Function that reads and adds a .jdx file to the raman_data_dict pickle file.
-	Function Input Parameters:
-		filename - string
-			This filename is the exact file name that is affiliated with the .jdx file that has been
-			downloaded that the user wants to add to their pickle file. 
-	Function Returns:
-		shoyu_data_dict - dictionary
-			This is the dictionary that contains the data loaded from the pickle file and is the 
-			common way in which the user interacts with data in this software.
-
-    Notes: As with the `download_cas` function, this is not intended to be a user-interactable function.
-
+    
+    Args:
+        filename (str): This filename is the exact file name that is affiliated with the
+                        .jdx file that has been downloaded that the user wants to add to their pickle file. 
+            
+    Returns:
+        shoyu_data_dict (dict): This is the dictionary that contains the data loaded from
+                                the pickle file and is the common way in which the user
+                                interacts with data in this software.
     """
     shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
     data = jcamp.JCAMP_reader(filename)
@@ -86,15 +80,15 @@ def add_jdx(filename, label=None):
 
 def initialize_standard_library():
     """
-    Function that downloads a standard library of raman spectra from the NIST Chemistry WebBook. It generates a 
-    folder and a pickle file for storing data for future use.
+    Function that downloads a standard library of raman spectra from the NIST Chemistry WebBook.
+    It generates a folder and a pickle file for storing data for future use. This function must
+    be run BEFORE any other function in this package to generate the shoyu_data_dict.p file
 
-    	Function Input Parameters: This function does not take input parameters
+    Args:
+        This function does not take input parameters
 
-    	Function Returns: This function has no returns.
-
-    Notes: This function must be run BEFORE any other function in this package, as all the other packages 
-    assume the presence of the folder created by this function. 
+    Returns:
+        This function has no returns.
     """
     # dictionary of CAS registry numbers for standard library
     cas_lib = {'water':'7732-18-5',
@@ -120,20 +114,16 @@ def more_please(cas_num, label=None):
     database, adds it to shoyu_data_dict, pickles shoyu_data_dict
     and returns the updated shoyu_data_dict.
     
-    	Function Input Parameters: 
-		cas_num - string
-			The CAS number that is associated with the compound intended to be downloaded
-			It must be in the format of a string, but it is insensitive to hyphens.
-		label - string (Optional)
-			By passing this label, instead of using the title found on the NIST webbook, when 
-			the compound spectral data is added to the shoyu_data_dict it will use the text of
-			`label` as the dictionary key for this spectral data. 
+    Args: 
+        cas_num (str): The CAS number that is associated with the compound intended to be downloaded.
+                       It must be in the format of a string, but it is insensitive to hyphens.
+        label (str): (Optional) By passing this label, instead of using the title found on the NIST webbook,
+                     when the compound spectral data is added to the shoyu_data_dict it will use the text of
+                     `label` as the dictionary key for this spectral data. 
 
-	Function Returns:
-		shoyu_data_dict - Dictionary
-			This is the dictionary that contains the data loaded from the pickle file, and is
-			the common way in which the user interacts with data in this software.
-
+    Returns:
+        shoyu_data_dict (dict): This is the dictionary that contains the data loaded from the pickle file,
+                                and is the common way in which the user interacts with data in this software.
     """
     # Drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
@@ -146,21 +136,18 @@ def combine_spectra(compound_1, compound_2, plot=False):
     """
     Function that combines two spectrum via interpolation and summation.
     
-    	Function Input Parameters:
-		compound_1 - dictionary key and set of associated values
-			The first of the two compound spectra that it is desired to combine. The ordering between the
-			two input compounds is not strictly speaking important - the output will be identical either way.
-		compound_2 - dictionary key and set of associated values
-			The second of the two compound spectra that it is desired to combine. 
-		plot - Boolean (Optional)
-			This argument is used to dictate whether or not you would like to output a plot which shows the 
-			combined spectra, as well as the two original spectra, overlaid on the same plot. Defaults to False.
+    Args:
+        compound_1 (str): dictionary key for the compound in shoyu_data_dict.p
+        compound_2 (str): dictionary key for the compound in shoyu_data_dict.p
+        plot (boolean): (Optional) This argument is used to dictate whether or not you would
+                        like to output a plot which shows the combined spectra, as well as the
+                        two original spectra, overlaid on the same plot. Defaults to False.
 
-	Function Returns:
-		x_combined - numpy array
-			The x-values of the new spectra that contains the combined values of the two spectra that were input.
-		y_combined - numpy array
-			The y-values of the new spectra that contains the combined values of the two spectra that were input.
+    Returns:
+        x_combined (numpy array): The x-values of the new spectra that contains the combined
+                                  values of the two spectra that were input.
+        y_combined (numpy array): The y-values of the new spectra that contains the combined
+                                  values of the two spectra that were input.
 
     """
     # compound 1
