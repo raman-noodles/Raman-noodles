@@ -22,10 +22,10 @@ def download_cas(cas_num):
     """
     Function that saves raman data downloaded from NIST webpage.
 
-	Function Input Parameters:
-		cas_num - string
-			The CAS number associated with the compound that is intended to be downloaded. 
-			It must be in the format of a string, but it is insensitive to having hyphens.
+    Function Input Parameters:
+        cas_num - string
+            The CAS number associated with the compound that is intended to be downloaded. 
+            It must be in the format of a string, but it is insensitive to having hyphens.
 
 	Function Returns:
 		This function has no returns. 
