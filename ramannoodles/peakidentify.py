@@ -4,10 +4,10 @@ to be analyzed. From that identification, it then classifies the peaks in the un
 spectra based on the fed-in known spectra. 
  """
 import math
-import matplotlib.pyplot as plt
+import pickle
 import pandas as pd
 import numpy as np
-import pickle
+import matplotlib.pyplot as plt
 from ramannoodles import spectrafit
 from ramannoodles import shoyu
 
