@@ -53,11 +53,12 @@ def download_cas(cas_num):
 def add_jdx(filename, label=None):
     """
     Function that reads and adds a .jdx file to the raman_data_dict pickle file.
-    
+
     Args:
         filename (str): This filename is the exact file name that is affiliated with the
-                        .jdx file that has been downloaded that the user wants to add to their pickle file. 
-            
+                        .jdx file that has been downloaded that the user wants to add to
+                        their pickle file.
+
     Returns:
         shoyu_data_dict (dict): This is the dictionary that contains the data loaded from
                                 the pickle file and is the common way in which the user
@@ -80,9 +81,10 @@ def add_jdx(filename, label=None):
 
 def initialize_standard_library():
     """
-    Function that downloads a standard library of raman spectra from the NIST Chemistry WebBook.
-    It generates a folder and a pickle file for storing data for future use. This function must
-    be run BEFORE any other function in this package to generate the shoyu_data_dict.p file
+    Function that downloads a standard library of raman spectra from the NIST Chemistry
+    WebBook. It generates a folder and a pickle file for storing data for future use.
+    This function must be run BEFORE any other function in this package to generate the
+    shoyu_data_dict.p file
 
     Args:
         This function does not take input parameters
@@ -113,17 +115,20 @@ def more_please(cas_num, label=None):
     Function that downloads a spectra from the NIST
     database, adds it to shoyu_data_dict, pickles shoyu_data_dict
     and returns the updated shoyu_data_dict.
-    
-    Args: 
-        cas_num (str): The CAS number that is associated with the compound intended to be downloaded.
-                       It must be in the format of a string, but it is insensitive to hyphens.
-        label (str): (Optional) By passing this label, instead of using the title found on the NIST webbook,
-                     when the compound spectral data is added to the shoyu_data_dict it will use the text of
-                     `label` as the dictionary key for this spectral data. 
+
+    Args:
+        cas_num (str): The CAS number that is associated with the compound intended
+                       to be downloaded. It must be in the format of a string, but it
+                       is insensitive to hyphens.
+        label (str): (Optional) By passing this label, instead of using the title found
+                     on the NIST webbook, when the compound spectral data is added to the
+                     shoyu_data_dict it will use the text of `label` as the dictionary
+                     key for this spectral data.
 
     Returns:
-        shoyu_data_dict (dict): This is the dictionary that contains the data loaded from the pickle file,
-                                and is the common way in which the user interacts with data in this software.
+        shoyu_data_dict (dict): This is the dictionary that contains the data loaded from
+                                the pickle file, and is the common way in which the user
+                                interacts with data in this software.
     """
     # Drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
@@ -132,83 +137,160 @@ def more_please(cas_num, label=None):
     return shoyu_data_dict
 
 
-def combine_spectra(compound_1, compound_2, plot=False):
+def clean_spectra(compound):
     """
-    Function that combines two spectrum via interpolation and summation.
-    
-    Args:
-        compound_1 (str): dictionary key for the compound in shoyu_data_dict.p
-        compound_2 (str): dictionary key for the compound in shoyu_data_dict.p
-        plot (boolean): (Optional) This argument is used to dictate whether or not you would
-                        like to output a plot which shows the combined spectra, as well as the
-                        two original spectra, overlaid on the same plot. Defaults to False.
-
-    Returns:
-        x_combined (numpy array): The x-values of the new spectra that contains the combined
-                                  values of the two spectra that were input.
-        y_combined (numpy array): The y-values of the new spectra that contains the combined
-                                  values of the two spectra that were input.
-
+    docstring
     """
-    # compound 1
-    x_comp1 = compound_1['x']
-    y_comp1 = compound_1['y']
-    y_comp1 = spectrafit.subtract_baseline(y_comp1)
-    # compound 2
-    x_comp2 = compound_2['x']
-    y_comp2 = compound_2['y']
-    y_comp2 = spectrafit.subtract_baseline(y_comp2)
+    # extract data from dictionary
+    x_comp = compound['x']
+    y_comp = compound['y']
+    y_comp = spectrafit.subtract_baseline(y_comp)
     # zip x and y values
-    comp1_data = list(zip(x_comp1, y_comp1))
-    comp2_data = list(zip(x_comp2, y_comp2))
+    comp_data = list(zip(x_comp, y_comp))
     #clean comp1
-    comp1_data_clean = []
-    for i in range(1, len(comp1_data)-1):
-        if comp1_data[i][0] == comp1_data[i-1][0]:
+    comp_data_clean = []
+    for i in range(1, len(comp_data)-1):
+        if comp_data[i][0] == comp_data[i-1][0]:
             pass
         else:
-            comp1_data_clean.append(comp1_data[i])
-    # clean comp2
-    comp2_data_clean = []
-    for i in range(1, len(comp2_data)-1):
-        if comp2_data[i][0] == comp2_data[i-1][0]:
-            pass
-        else:
-            comp2_data_clean.append(comp2_data[i])
-    # unzip values
-    x_comp1, y_comp1 = zip(*comp1_data_clean)
-    x_comp2, y_comp2 = zip(*comp2_data_clean)
+            comp_data_clean.append(comp_data[i])
+    return comp_data_clean
+
+
+def interpolate_spectra(comp_data_clean):
+    """
+    docstring
+    """
+    # unzip data
+    x_comp, y_comp = zip(*comp_data_clean)
     # interpolate data
-    comp1_int = interpolate.interp1d(x_comp1, y_comp1, kind='cubic')
-    comp2_int = interpolate.interp1d(x_comp2, y_comp2, kind='cubic')
+    comp_int = interpolate.interp1d(x_comp, y_comp, kind='cubic')
     # define ranges
-    comp1_range = np.arange(int(min(x_comp1))+1, int(max(x_comp1)), 1)
-    comp2_range = np.arange(int(min(x_comp2))+1, int(max(x_comp2)), 1)
+    comp_range = np.arange(int(min(x_comp))+1, int(max(x_comp)), 1)
     # run interpolations
-    y_comp1_interp = comp1_int(comp1_range)
-    y_comp2_interp = comp2_int(comp2_range)
+    y_comp_interp = comp_int(comp_range)
     # zip interpolated values
-    comp1_data_int = list(zip(comp1_range, y_comp1_interp))
-    comp2_data_int = list(zip(comp2_range, y_comp2_interp))
+    comp_data_int = list(zip(comp_range, y_comp_interp))
+    return comp_data_int
+
+
+def add_spectra(comp1_data_int, comp2_data_int):
+    """
+    docstring
+    """
     # add the two spectra
     combined = sorted(comp1_data_int + comp2_data_int)
     # add by like
-    d = {x:0 for x,_ in combined}
-    for name,num in combined:
-        d[name] += num
-    sum_combined = list(map(tuple, d.items()))
+    same_x = {x:0 for x, _ in combined}
+    for name, num in combined:
+        same_x[name] += num
+    sum_combined = list(map(tuple, same_x.items()))
     # unzip
     x_combined, y_combined = zip(*sum_combined)
     # set as arrays
     x_combined = np.asarray(x_combined)
     y_combined = np.asarray(y_combined)
+    return x_combined, y_combined
+
+
+def combine_spectra(compound_1, compound_2, plot=False):
+    """
+    docstring
+    """
+    data1 = clean_spectra(compound_1)
+    data2 = clean_spectra(compound_2)
+    comp1_data_int = interpolate_spectra(data1)
+    comp2_data_int = interpolate_spectra(data2)
+    x_combined, y_combined = add_spectra(comp1_data_int, comp2_data_int)
     if plot:
         # plot original data and combined plot
-        plt.figure(figsize=(15,5))
-        plt.plot(x_comp1, y_comp1, 'b--', label=compound_1['title'])
-        plt.plot(x_comp2, y_comp2, 'g--', label=compound_2['title'])
+        plt.figure(figsize=(15, 5))
+        plt.plot(compound_1['x'], compound_1['y'], 'b--', label=compound_1['title'])
+        plt.plot(compound_2['x'], compound_2['y'], 'g--', label=compound_2['title'])
         plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
         plt.legend()
         plt.xlabel('cm$^{-1}$', fontsize=14)
         plt.ylabel('Absoprtion', fontsize=14)
     return x_combined, y_combined
+
+
+# def combine_spectra(compound_1, compound_2, plot=False):
+#     """
+#     Function that combines two spectrum via interpolation and summation.
+
+#     Args:
+#         compound_1 (str): dictionary key for the compound in shoyu_data_dict.p
+#         compound_2 (str): dictionary key for the compound in shoyu_data_dict.p
+#         plot (boolean): (Optional) This argument is used to dictate whether or not you
+#                         would like to output a plot which shows the combined spectra,
+#                         as well as the two original spectra, overlaid on the same plot.
+#                         Defaults to False.
+
+#     Returns:
+#         x_combined (numpy array): The x-values of the new spectra that contains the
+#                                   combined values of the two spectra that were input.
+#         y_combined (numpy array): The y-values of the new spectra that contains the
+#                                   combined values of the two spectra that were input.
+#     """
+#     # compound 1
+#     x_comp1 = compound_1['x']
+#     y_comp1 = compound_1['y']
+#     y_comp1 = spectrafit.subtract_baseline(y_comp1)
+#     # compound 2
+#     x_comp2 = compound_2['x']
+#     y_comp2 = compound_2['y']
+#     y_comp2 = spectrafit.subtract_baseline(y_comp2)
+#     # zip x and y values
+#     comp1_data = list(zip(x_comp1, y_comp1))
+#     comp2_data = list(zip(x_comp2, y_comp2))
+#     #clean comp1
+#     comp1_data_clean = []
+#     for i in range(1, len(comp1_data)-1):
+#         if comp1_data[i][0] == comp1_data[i-1][0]:
+#             pass
+#         else:
+#             comp1_data_clean.append(comp1_data[i])
+#     # clean comp2
+#     comp2_data_clean = []
+#     for i in range(1, len(comp2_data)-1):
+#         if comp2_data[i][0] == comp2_data[i-1][0]:
+#             pass
+#         else:
+#             comp2_data_clean.append(comp2_data[i])
+#     # unzip values
+#     x_comp1, y_comp1 = zip(*comp1_data_clean)
+#     x_comp2, y_comp2 = zip(*comp2_data_clean)
+#     # interpolate data
+#     comp1_int = interpolate.interp1d(x_comp1, y_comp1, kind='cubic')
+#     comp2_int = interpolate.interp1d(x_comp2, y_comp2, kind='cubic')
+#     # define ranges
+#     comp1_range = np.arange(int(min(x_comp1))+1, int(max(x_comp1)), 1)
+#     comp2_range = np.arange(int(min(x_comp2))+1, int(max(x_comp2)), 1)
+#     # run interpolations
+#     y_comp1_interp = comp1_int(comp1_range)
+#     y_comp2_interp = comp2_int(comp2_range)
+#     # zip interpolated values
+#     comp1_data_int = list(zip(comp1_range, y_comp1_interp))
+#     comp2_data_int = list(zip(comp2_range, y_comp2_interp))
+#     # add the two spectra
+#     combined = sorted(comp1_data_int + comp2_data_int)
+#     # add by like
+#     same_x = {x:0 for x, _ in combined}
+#     for name, num in combined:
+#         same_x[name] += num
+#     sum_combined = list(map(tuple, same_x.items()))
+#     # unzip
+#     x_combined, y_combined = zip(*sum_combined)
+#     # set as arrays
+#     x_combined = np.asarray(x_combined)
+#     y_combined = np.asarray(y_combined)
+#     if plot:
+#         # plot original data and combined plot
+#         plt.figure(figsize=(15, 5))
+#         plt.plot(x_comp1, y_comp1, 'b--', label=compound_1['title'])
+#         plt.plot(x_comp2, y_comp2, 'g--', label=compound_2['title'])
+#         plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
+#         plt.legend()
+#         plt.xlabel('cm$^{-1}$', fontsize=14)
+#         plt.ylabel('Absoprtion', fontsize=14)
+#     return x_combined, y_combined

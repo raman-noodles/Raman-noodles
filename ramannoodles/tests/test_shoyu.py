@@ -19,8 +19,8 @@ def test_download_cas():
     shoyu.download_cas(cas_num)
     assert os.path.isdir('raman_spectra/'), 'directory not found'
     assert os.path.isfile('raman_spectra/7732185_NIST_IR.jdx'), 'file not saved correctly'
-    
-    
+
+
 def test_add_jdx():
     """
     Test function that confirms that custom labeling is successful when updating shoyu_data_dict.p,
@@ -33,7 +33,7 @@ def test_add_jdx():
     water = shoyu_data_dict['Water_label_test']
     assert water['yunits'] == 'ABSORBANCE', 'Incorrect y units stored'
 
-    
+
 def test_initialize_standard_library():
     """
     Test function that confirms the raman_spectra/ directory is created, the .jdx files are downloaded
@@ -55,8 +55,8 @@ def test_more_please():
     shoyu_data_dict = shoyu.more_please(cas_num)
     assert os.path.isfile('raman_spectra/109660_NIST_IR.jdx'), 'file not found'
     assert 'N-PENTANE' in shoyu_data_dict, 'N-PENTANTE not successfully added to shoyu_data_dict'
-    
-    
+
+
 def test_combine_spectra():
     """
     Test function that confirms that the two compounds from shoyu_data_dict.p were combined sucessfully,
@@ -71,5 +71,3 @@ def test_combine_spectra():
     ranges = [max(compound_1['x']), min(compound_1['x']), max(compound_2['x']), min(compound_2['x'])]
     assert min(ranges) <= min(data[0]), 'output data contains values below the minimum range of either compound'
     assert max(ranges) >= max(data[0]), 'output data contains values above the maximum range of either compound'
-    
-    
