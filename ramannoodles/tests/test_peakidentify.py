@@ -1,5 +1,5 @@
 """
-Module used to unit test the functionality and outputs the peakiden.py module
+Module used to unit test the functionality and outputs the peakidentify.py module
 """
 # IMPORTING MODULES 
 import math
@@ -20,16 +20,11 @@ def test_peak_1D_score():
     rowcat=row_i+row_j
     ArrayA=np.array([[0,1], [2,1],[0,3]])
     # Run Function for lists
-    testscore=peakidentify.peak_1D_score(row_i,row_j,1)[0][:]
-#     print(testscore)
-    testpeaks=peakidentify.peak_1D_score(row_i,row_j,1)[1][:]
-#     print(testpeaks)
+    testscore=peak_1D_score(row_i,row_j,1)[0][:]
+    testpeaks=peak_1D_score(row_i,row_j,1)[1][:]
     # Run Function for arrays
-    Arrayscore=peakidentify.peak_1D_score(ArrayA[0],ArrayA[2],1)[0][:]
-    print(Arrayscore)
-    print(ArrayA[0])
+    Arrayscore=peak_1D_score(ArrayA[0],ArrayA[2],1)[0][:]
     arraycat=np.concatenate((ArrayA[0],ArrayA[2]))
-    print(arraycat)
     # make assertions
     assert len(row_i) == len(row_j), 'Input lengths do not match'
     assert len(Arrayscore) == len(arraycat), 'Output list length different than concatenated lists length'
@@ -43,13 +38,12 @@ def test_score_max():
     row_j=[2,1]
     rowcat=row_i+row_j
     ArrayA=np.array([[0,1], [2,1],[0,3]])
-    print(type(ArrayA))
     k=2
     arraycat=np.concatenate((ArrayA[0],ArrayA[1]))
-    print(arraycat)
-    # Run Function
-    maxscores,maxpeaks = peakidentify.score_max(row_i,row_j,k)
-    Arrmaxscores,Arrmaxpeaks = peakidentify.score_max(ArrayA[0],ArrayA[1],k)
+    # Run Function for lists
+    maxscores,maxpeaks = score_max(row_i,row_j,k)
+    # Run Function for arrays
+    Arrmaxscores,Arrmaxpeaks = score_max(ArrayA[0],ArrayA[1],k)
     # make assertions
     assert len(Arrmaxscores) == len(arraycat), 'Output list length different than array length'
     for i in range(len(arraycat)):
@@ -65,11 +59,10 @@ def test_score_sort():
     k=2
     arraycat=np.concatenate((ArrayA[0],ArrayA[1]))
     # Run Previous Function to get max score normalization
-    maxscores,maxpeaks = peakidentify.score_max(row_i,row_j,k)
-    # Run Function
-    sortedscores=peakidentify.score_sort(row_i,row_j,max(maxscores))[0][0]
-    Arrsortedscores=peakidentify.score_sort(ArrayA[0],ArrayA[1],max(maxscores))[0][0]
-    print(max(maxscores))
-    print(Arrsortedscores)
+    maxscores,maxpeaks = score_max(row_i,row_j,k)
+    # Run Function for lists
+    sortedscores=score_sort(row_i,row_j,max(maxscores))[0][0]
+    # Run Function for arrays
+    Arrsortedscores=score_sort(ArrayA[0],ArrayA[1],max(maxscores))[0][0]
     # make assertions
     assert len(arraycat) == len(Arrsortedscores), 'Output list length different than concatenated lists length'
