@@ -20,10 +20,10 @@ def test_peak_1D_score():
     rowcat=row_i+row_j
     ArrayA=np.array([[0,1], [2,1],[0,3]])
     # Run Function for lists
-    testscore=peak_1D_score(row_i,row_j,1)[0][:]
-    testpeaks=peak_1D_score(row_i,row_j,1)[1][:]
+    testscore=peakidentify.peak_1D_score(row_i,row_j,1)[0][:]
+    testpeaks=peakidentify.peak_1D_score(row_i,row_j,1)[1][:]
     # Run Function for arrays
-    Arrayscore=peak_1D_score(ArrayA[0],ArrayA[2],1)[0][:]
+    Arrayscore=peakidentify.peak_1D_score(ArrayA[0],ArrayA[2],1)[0][:]
     arraycat=np.concatenate((ArrayA[0],ArrayA[2]))
     # make assertions
     assert len(row_i) == len(row_j), 'Input lengths do not match'
@@ -41,9 +41,9 @@ def test_score_max():
     k=2
     arraycat=np.concatenate((ArrayA[0],ArrayA[1]))
     # Run Function for lists
-    maxscores,maxpeaks = score_max(row_i,row_j,k)
+    maxscores,maxpeaks = peakidentify.score_max(row_i,row_j,k)
     # Run Function for arrays
-    Arrmaxscores,Arrmaxpeaks = score_max(ArrayA[0],ArrayA[1],k)
+    Arrmaxscores,Arrmaxpeaks = peakidentify.score_max(ArrayA[0],ArrayA[1],k)
     # make assertions
     assert len(Arrmaxscores) == len(arraycat), 'Output list length different than array length'
     for i in range(len(arraycat)):
@@ -59,10 +59,10 @@ def test_score_sort():
     k=2
     arraycat=np.concatenate((ArrayA[0],ArrayA[1]))
     # Run Previous Function to get max score normalization
-    maxscores,maxpeaks = score_max(row_i,row_j,k)
+    maxscores,maxpeaks = peakidentify.score_max(row_i,row_j,k)
     # Run Function for lists
-    sortedscores=score_sort(row_i,row_j,max(maxscores))[0][0]
+    sortedscores=peakidentify.score_sort(row_i,row_j,max(maxscores))[0][0]
     # Run Function for arrays
-    Arrsortedscores=score_sort(ArrayA[0],ArrayA[1],max(maxscores))[0][0]
+    Arrsortedscores=peakidentify.score_sort(ArrayA[0],ArrayA[1],max(maxscores))[0][0]
     # make assertions
     assert len(arraycat) == len(Arrsortedscores), 'Output list length different than concatenated lists length'
