@@ -129,6 +129,8 @@ def peak_position_comparisons(unknown_peaks, known_compound_peaks, known_compoun
                 position_assignment.append(known_compound_list[j]['title'])
             else:
                 pass
+        if position_assignment == []:
+            position_assignment.append("Unassigned")
         unknown_peak_assignment.append(position_assignment)
 
     return unknown_peak_assignment
