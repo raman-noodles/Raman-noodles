@@ -258,7 +258,7 @@ def test_plotting_peak_assignments():
     except TypeError:
         print("The function correctly handled the case when an int was passed in the unknown_peak_assignment list")
 
-def test_peak_1D_score():
+def test_peak_1d_score():
     """Evaluates the functionality of the peak_1D_score function"""
     # Initialize the test arguments 
     row_i=[0,1]
@@ -266,10 +266,10 @@ def test_peak_1D_score():
     rowcat=row_i+row_j
     ArrayA=np.array([[0,1], [2,1],[0,3]])
     # Run Function for lists
-    testscore=peakidentify.peak_1D_score(row_i,row_j,1)[0][:]
-    testpeaks=peakidentify.peak_1D_score(row_i,row_j,1)[1][:]
+    testscore=peakidentify.peak_1d_score(row_i,row_j,1)[0][:]
+    testpeaks=peakidentify.peak_1d_score(row_i,row_j,1)[1][:]
     # Run Function for arrays
-    Arrayscore=peakidentify.peak_1D_score(ArrayA[0],ArrayA[2],1)[0][:]
+    Arrayscore=peakidentify.peak_1d_score(ArrayA[0],ArrayA[2],1)[0][:]
     arraycat=np.concatenate((ArrayA[0],ArrayA[2]))
     # make assertions
     assert len(row_i) == len(row_j), 'Input lengths do not match'
