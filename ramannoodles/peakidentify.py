@@ -30,7 +30,7 @@ def peak_assignment(unknown_x, unknown_y, known_compound_list, precision = 0.03,
         if not isinstance(known_compound_list[i], dict):
             raise TypeError("Passed value within `known_compound_list` is not a dictionary! Instead, it is: " + str(type(known_compound_list[i])))
     
-    if not isinstance(precision, [float, int]):
+    if not (isinstance(precision, float) or isinstance(precision, int)):
         raise TypeError("Passed value of `precision` is not a float or int! Instead, it is: " + str(type(precision)))
     
     if not isinstance(plot, bool):
@@ -72,7 +72,7 @@ def compare_unknown_to_known(combined_peaks, known_peaks, precision):
     if not isinstance(known_peaks, list):
         raise TypeError("Passed value of `known_peaks` is not a list! Instead, it is: " + str(type(known_peaks)))
     
-    if not isinstance(precision, [float, int]):
+    if not isinstance(precision, (float, int)):
         raise TypeError("Passed value of `precision` is not a float or int! Instead, it is: " + str(type(precision)))
     
     assignment_matrix = np.zeros(len(combined_peaks))
