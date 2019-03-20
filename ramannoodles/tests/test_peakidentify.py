@@ -54,7 +54,8 @@ def test_peak_assignment():
         peakidentify.peak_assignment(1, unknown_y, known_compound_list, precision, 'False')
     except TypeError:
         print("An invalid plot value was passed to the function, and it was handled well with a TypeError.")
-
+    
+    
 def test_compare_unknown_to_known():
     """This function tests the operation of the compare_unknown_to_known function in peakidentify.py"""
     #Build our test dataset. 
@@ -90,12 +91,12 @@ def test_compare_unknown_to_known():
     #After testing for resilience to unexpected inputs, now ensure outputs are performing as expected. 
     
     #First, make sure function is returning the list.
-    assert type(peakidentify.compare_unknown_to_known(unknown_peaks, known_peaks[0], precision)) == list, "Function is not returning a list"
+    assert type(peakidentify.compare_unknown_to_known(unknown_peaks, known_peaks[0], precision)) == np.ndarray, "Function is not returning a list"
     
     #Compare one set of peaks to itself. The full association matrix should be one line, with all values = 1. 
-    assert mean(peakidentify.compare_unknown_to_known(known_peaks[0], known_peaks[0], precision)) == 1, "Peak Assignment Error. Comparison of compound against itself should find all peaks."
+    assert np.mean(peakidentify.compare_unknown_to_known(known_peaks[0], known_peaks[0], precision)) == 1, "Peak Assignment Error. Comparison of compound against itself should find all peaks."
     
-    assert mean(peakidentify.compare_unknown_to_known([1,3,6], [1000, 2000, 5000], precision)) == 0, "Peak Assignment Error. Passed values should have no matching assignments."
+    assert np.mean(peakidentify.compare_unknown_to_known([1,3,6], [1000, 2000, 5000], precision)) == 0, "Peak Assignment Error. Passed values should have no matching assignments."
     
 def test_peak_position_comparisons():
     """This function tests the operation of the peak_position_comparisons function in peakidentify.py
@@ -112,12 +113,12 @@ def test_peak_position_comparisons():
     unknown_y = np.asarray(unknown_y)
     known_compound_list = [compound_1, compound_2, compound_3]
     precision = 0.03
+    unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     known_peaks = []
     association_matrix = []
-    unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     for i in range(len(known_compound_list)):
         known_peaks.append(spectrafit.compound_report(known_compound_list[i])[0])
-        association_matrix.append(peakidentify.compare_unknown_to_known(unknown_peaks, known_peaks[i], precision))
+        association_matrix.append(peakidentify.compare_unknown_to_known(unknown_peaks, known_peaks[i], 0.03))
     
     #Then, test error handling of bad inputs for the function. 
     try:
@@ -140,17 +141,25 @@ def test_peak_position_comparisons():
     except TypeError:
         print("An invalid association_matrix value was passed to the function, and was handled correctly.")
     
-    #Check to make sure the function is returning a numpy array.
-    assert type(peakidentify.peak_position_comparisons(unknown_peaks, known_peaks, known_compound_list, association_matrix)) == np.array, "The function is not returning a numpy array."
+    #Check to make sure the function is returning a list.
+    assert type(peakidentify.peak_position_comparisons(unknown_peaks, known_peaks, known_compound_list, association_matrix)) == list, "The function is not returning a list."
     
-    #Test a call that says that no peaks have associations (ie, association matrix is full of zeros) 
-    assert peakidentify.peak_position_comparisons([600, 1200, 5000], [1, 3, 7, 10], compound_1, np.zeros(3))[0] == 'Unassigned', "The function is not properly handling unassigned peaks."
+    #Test a call that says that no peaks have associations 
+    association_matrix_0 = []
+    association_matrix_0.append(peakidentify.compare_unknown_to_known(known_peaks[0], known_peaks[1], 0.03))
+    Zero_Output = peakidentify.peak_position_comparisons(known_peaks[0], [known_peaks[1]], [compound_1], association_matrix_0)[0]
+    assert Zero_Output[0] == 'Unassigned', "The function is not properly handling unassigned peaks."
     
     #Test the function to make sure that it has the right functionality
-    test_peak_labels = peakidentify.peak_position_comparisons([500, 1000, 3000], [1, 4, 5], compound_1, [1,0,1])
-    assert test_peak_labels[0] == 'WATER', "The function is not correctly assigning peaks when association matrix = 1"
-    assert test_peak_labels[1] == 'Unassigned', "The function is not correctly handling a lack of peak assignments"
-    assert test_peak_labels[2] == 'WATER', "The funciton is not correctly assigning peaks when association matrix = 1"
+    association_matrix_1 = []
+    #Generate a matrix with all associations equal to 1
+    association_matrix_1.append(peakidentify.compare_unknown_to_known(known_peaks[0], known_peaks[0], 0.03))
+    #change the middle index to 0
+    association_matrix_1[0][1] = 0
+    test_peak_labels = peakidentify.peak_position_comparisons(known_peaks[0], [known_peaks[0]], [compound_1], association_matrix_1)
+    assert test_peak_labels[0][0] == 'WATER', "The function is not correctly assigning peaks when association matrix = 1"
+    assert test_peak_labels[1][0] == 'Unassigned', "The function is not correctly handling a lack of peak assignments"
+    assert test_peak_labels[2][0] == 'WATER', "The funciton is not correctly assigning peaks when association matrix = 1"
     
 def test_percentage_of_peaks_found():
     """This function tests the operation of the percentage_of_peaks_found function in peakidentify.py"""
@@ -164,9 +173,9 @@ def test_percentage_of_peaks_found():
     unknown_y = np.asarray(unknown_y)
     known_compound_list = [compound_1, compound_2, compound_3]
     precision = 0.03
+    unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     known_peaks = []
     association_matrix = []
-    unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     for i in range(len(known_compound_list)):
         known_peaks.append(spectrafit.compound_report(known_compound_list[i])[0])
         association_matrix.append(peakidentify.compare_unknown_to_known(unknown_peaks, known_peaks[i], precision))
@@ -196,12 +205,13 @@ def test_percentage_of_peaks_found():
     assert type(peakidentify.percentage_of_peaks_found(known_peaks, association_matrix, known_compound_list)) == dict, "The function is not returning a dictionary."
     
     #Test for function output. 
-    water_peaks = spectrafit.compound_report(compound_1)
-    water_dict_0 = peakidentify.percentage_of_peaks_found(water_peaks, [0, 0, 0], compound_1) 
+    water_peaks = spectrafit.compound_report(compound_1)[0]
+    water_dict_0 = peakidentify.percentage_of_peaks_found([water_peaks], [[0, 0, 0]], [compound_1]) 
     assert water_dict_0['WATER'] == 0, "The function is not correctly calculating percentages when no peaks are found"
     
-    water_dict_1 = peakidentify.percentage_of_peaks_found(water_peaks, [1, 1, 1], compound_1)
-    assert water_dict_1['WATER'] == 1, "The function is not correctly calculating percentages when all peaks are found"
+    water_dict_1 = peakidentify.percentage_of_peaks_found([water_peaks], [[1, 1, 1]], [compound_1])
+    assert water_dict_1['WATER'] == 100, "The function is not correctly calculating percentages when all peaks are found"
+
 
 def test_plotting_peak_assignments():
     """This function tests the operation of the peak_assignment function in peakidentify.py"""
@@ -215,12 +225,11 @@ def test_plotting_peak_assignments():
     unknown_y = np.asarray(unknown_y)
     known_compound_list = [compound_1, compound_2, compound_3]
     precision = 0.03
+    unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     known_peaks = []
     association_matrix = []
-    unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     for i in range(len(known_compound_list)):
-        known_peaks.append(spectrafit.compound_report(known_compound_list[i]))
-        association_matrix.append(peakidentify.compare_unknown_to_known(unknown_peaks, known_peaks[i], precision))
+        known_peaks.append(spectrafit.compound_report(known_compound_list[i])[0])
     unknown_peak_assignments = peakidentify.percentage_of_peaks_found(known_peaks, association_matrix, known_compound_list)
     
     #Test for input error handling. 
@@ -248,7 +257,6 @@ def test_plotting_peak_assignments():
         peakidentify.plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, ['WATER', 23, 'CO'])
     except TypeError:
         print("The function correctly handled the case when an int was passed in the unknown_peak_assignment list")
-
 
 def test_peak_1d_score():
     """Evaluates the functionality of the peak_1D_score function"""
