@@ -214,7 +214,7 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
     """
     
     fig = plt.figure(figsize=(15,6))
-    plt.ylabel('Absorbance', fontsize=14)
+    plt.ylabel('Counts (Normalized)', fontsize=14)
     plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
     plt.xlim(min(x_data), max(x_data))
     # plt.ylim(min(y_data)-(max(y_data)-min(y_data))*0.1, max(y_data)+(max(y_data)-min(y_data))*0.1)
