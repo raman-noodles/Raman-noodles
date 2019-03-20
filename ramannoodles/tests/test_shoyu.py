@@ -7,7 +7,7 @@ import pickle
 from ramannoodles import shoyu
 
 # open spectra library
-shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
+SHOYU_DATA_DICT = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
 
 def test_download_cas():
     """
@@ -36,15 +36,15 @@ def test_add_jdx():
 
 def test_initialize_standard_library():
     """
-    Test function that confirms the raman_spectra/ directory is created, the .jdx files are downloaded
-    and stored correctly, and that the shoyu_data_dict.p file is generated.
+    Test function that confirms the raman_spectra/ directory is created, the .jdx files are
+    downloaded and stored correctly, and that the shoyu_data_dict.p file is generated.
     """
     shoyu.initialize_standard_library()
     assert os.path.isdir('raman_spectra/'), 'Directory not found'
     assert os.path.isfile('raman_spectra/7732185_NIST_IR.jdx'), 'file not saved correctly'
     assert os.path.isfile('raman_spectra/shoyu_data_dict.p'), 'shoyu_data_dict.p not found'
-    
-    
+
+
 def test_more_please():
     """
     Test function that confirms that the pentane .jdx file was downloaded correctly and was
@@ -56,33 +56,37 @@ def test_more_please():
     assert os.path.isfile('raman_spectra/109660_NIST_IR.jdx'), 'file not found'
     assert 'N-PENTANE' in shoyu_data_dict, 'N-PENTANE not successfully added to shoyu_data_dict'
 
-    
+
 def test_clean_spectra():
     """
     docstring
     """
-    compound = shoyu_data_dict['WATER']
+    compound = SHOYU_DATA_DICT['WATER']
     comp_data_clean = shoyu.clean_spectra(compound)
     assert isinstance(comp_data_clean, list), 'output type not a list'
     assert len(comp_data_clean) < len(compound['x']), 'repeat data points were not removed'
-    
-    
+
+
 # def test_interpolate_spectra():
 #     compound = shoyu_data_dict['WATER']
 #     comp_data_clean = shoyu.clean_spectra(compound)
 #     comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
 
+
 def test_combine_spectra():
     """
-    Test function that confirms that the two compounds from shoyu_data_dict.p were combined sucessfully,
-    that the output data has the correct shape, and that the output range is within the overall
-    range of the two individual compounds.
+    Test function that confirms that the two compounds from shoyu_data_dict.p were combined
+    sucessfully, that the output data has the correct shape, and that the output range is
+    within the overall range of the two individual compounds.
     """
-    compound_1 = shoyu_data_dict['WATER']
-    compound_2 = shoyu_data_dict['CARBON MONOXIDE']
+    compound_1 = SHOYU_DATA_DICT['WATER']
+    compound_2 = SHOYU_DATA_DICT['CARBON MONOXIDE']
     data = shoyu.combine_spectra(compound_1, compound_2)
     assert len(data[0]) == len(data[1]), 'lengths of x and y data do not match'
     assert len(data) == 2, 'shape of output data different than expected'
-    ranges = [max(compound_1['x']), min(compound_1['x']), max(compound_2['x']), min(compound_2['x'])]
-    assert min(ranges) <= min(data[0]), 'output data contains values below the minimum range of either compound'
-    assert max(ranges) >= max(data[0]), 'output data contains values above the maximum range of either compound'
+    ranges = [max(compound_1['x']), min(compound_1['x']),
+              max(compound_2['x']), min(compound_2['x'])]
+    assert min(ranges) <= min(data[0]), """
+    output data contains values below the minimum range of either compound"""
+    assert max(ranges) >= max(data[0]), """
+    output data contains values above the maximum range of either compound"""
