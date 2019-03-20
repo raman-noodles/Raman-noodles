@@ -54,7 +54,7 @@ def test_more_please():
     cas_num = '109-66-0'
     shoyu_data_dict = shoyu.more_please(cas_num)
     assert os.path.isfile('raman_spectra/109660_NIST_IR.jdx'), 'file not found'
-    assert 'N-PENTANE' in shoyu_data_dict, 'N-PENTANTE not successfully added to shoyu_data_dict'
+    assert 'N-PENTANE' in shoyu_data_dict, 'N-PENTANE not successfully added to shoyu_data_dict'
 
     
 def test_clean_spectra():
