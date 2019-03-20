@@ -99,7 +99,8 @@ def initialize_standard_library():
                'formic acid':'64-18-6',
                'isopropyl alcohol':'67-63-0',
                'ethanol':'64-17-5',
-               'acetone':'67-64-1'}
+               'acetone':'67-64-1',
+               'pentane':'109-66-0'}
     # initialize empty shoyu_data_dict
     shoyu_data_dict = {}
     os.makedirs('../raman_spectra', exist_ok=True)
