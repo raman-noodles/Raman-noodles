@@ -250,8 +250,8 @@ def combine_spectra(compound_1, compound_2, plot=False):
     if plot:
         # plot original data and combined plot
         plt.figure(figsize=(15, 5))
-        plt.plot(compound_1['x'], compound_1['y'], 'b--', label=compound_1['title'])
-        plt.plot(compound_2['x'], compound_2['y'], 'g--', label=compound_2['title'])
+        plt.plot([i[0] for i in data1], [i[1] for i in data1], 'b--', label=compound_1['title'])
+        plt.plot([i[0] for i in data2], [i[1] for i in data2], 'g--', label=compound_2['title'])
         plt.plot(x_combined, y_combined, 'r', label='Combination', linewidth=2, alpha=0.7)
         plt.legend()
         plt.xlabel('cm$^{-1}$', fontsize=14)
