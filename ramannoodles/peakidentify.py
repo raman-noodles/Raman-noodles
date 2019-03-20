@@ -198,7 +198,7 @@ def plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, unknown_peak_
 
 def peak_1D_score(rowA,rowB,scoremax):
     """
-    Returns scores with respect to the reciprocal of the 
+    Returns scores with respect to the repricoal of the 
     calculated Euclidean distance between peaks
     #√((x1-x2)^2) in 1D
     #√((x1-x2)^2 + (y1-y2)^2) in 2D
@@ -218,17 +218,17 @@ def peak_1D_score(rowA,rowB,scoremax):
 
     for i in range(len(rowA)):
         for j in range(len(rowB)):
-            distance = np.where((rowA[i] - rowB[j] > 50), np.nan, math.sqrt(sum([math.pow(rowA[i] - rowB[j], 2)])))
-            if (1/(distance + 1) > .02): # Score for peaks less than 50 units apart
-                scores.append((((1/(distance + 1)) / scoremax)))
-                peaks.append((rowA[i], rowB[j]))
+            distance = np.where((rowA[i] - rowB[j]>50),np.nan,math.sqrt(sum([math.pow(rowA[i] - rowB[j], 2)])))
+            if (1/(distance + 1)>.02): # Score for peaks less than 50 units apart
+                scores.append(((1/(distance + 1))/scoremax))
+                peaks.append((rowA[i],rowB[j]))
             else:
                 pass
-    return scores, peaks
+    return scores,peaks
 
 def score_max(list_input, row,k):
     """
-    Returns list of scores with respect to its output max score
+    Returns list of scores sorted with respect to the peaks related to its output max score
 
     Parameters:
         list_input (list):  input list
@@ -240,14 +240,15 @@ def score_max(list_input, row,k):
         maxpeaks (tuple): peaks associated with max scores
     """
     try:
-        maxscores, maxpeaks = peak_1D_score(list_input,row, sorted(set(peak_1D_score(list_input, row,1)[0][:]))[-k])
+        scoremax= sorted(set(peak_1D_score(list_input,row,1)[0][:]))[-k]
+        maxscores,maxpeaks = peak_1D_score(list_input,row,scoremax)
     
-    except Exception:
+    except Exception as e:
         
-        maxscores, maxpeaks = peak_1D_score(list_input, row, scoremax = 1)
+        maxscores,maxpeaks = peak_1D_score(list_input,row, scoremax=1)
         
-    return maxscores, maxpeaks
-def score_sort(list_input, row, k):
+    return maxscores,maxpeaks
+def score_sort(list_input, row,k):
     """
     Returns list of scores sorted
 
@@ -260,6 +261,5 @@ def score_sort(list_input, row, k):
         sortedscores (list): sorted Euclidean distances
     """
     sortedscores = []
-    sortedscores.append(score_max(list_input, row,k))
-    sortedscores.sort()
+    sortedscores.append(score_max(list_input,row,k))
     return sortedscores
