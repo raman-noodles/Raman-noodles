@@ -11,7 +11,6 @@ Developed by the Raman-Noodles team.
 
 import matplotlib.pyplot as plt
 import numpy as np
-import lmfit
 from lmfit.models import LorentzianModel
 from peakutils.baseline import baseline
 from scipy.signal import find_peaks
@@ -127,7 +126,7 @@ def lorentz_params(peaks):
                         to a minimum of 0, to prevent negatives.
     """
     peak_list = []
-    for i in range(len(peaks)):
+    for i, _ in enumerate(peaks):
         prefix = 'p{}_'.format(i+1)
         peak = LorentzianModel(prefix=prefix)
         if i == 0:
@@ -179,7 +178,6 @@ def model_fit(x_data, y_data, mod, pars, report=False):
                         for the input model.
     """
     # fit model
-#     init = mod.eval(pars, x=x_data)
     out = mod.fit(y_data, pars, x=x_data)
     if report:
         print(out.fit_report())
@@ -206,7 +204,7 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
     Returns:
         None
     """
-    fig = plt.figure(figsize=(15, 6))
+    plt.figure(figsize=(15, 6))
     plt.ylabel('Counts (Normalized)', fontsize=14)
     plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
     plt.xlim(min(x_data), max(x_data))
@@ -275,7 +273,7 @@ def compound_report(compound):
     # subtract baseline
     y_data = subtract_baseline(y_data)
     # detect peaks
-    peaks, peak_list = peak_detect(x_data, y_data)
+    peaks = peak_detect(x_data, y_data)[0]
     # assign parameters for least squares fit
     mod, pars = lorentz_params(peaks)
     # fit the model to the data
@@ -285,7 +283,7 @@ def compound_report(compound):
     peak_centers = []
     peak_sigma = []
     peak_ampl = []
-    for i in range(len(fit_peak_data)):
+    for i, _ in enumerate(fit_peak_data):
         peak_sigma.append(fit_peak_data[i][0])
         peak_centers.append(fit_peak_data[i][1])
         peak_ampl.append(fit_peak_data[i][2])
@@ -314,7 +312,7 @@ def data_report(x_data, y_data):
     # subtract baseline
     y_data = subtract_baseline(y_data)
     # detect peaks
-    peaks, peak_list = peak_detect(x_data, y_data)
+    peaks = peak_detect(x_data, y_data)[0]
     # assign parameters for least squares fit
     mod, pars = lorentz_params(peaks)
     # fit the model to the data
@@ -324,7 +322,7 @@ def data_report(x_data, y_data):
     peak_centers = []
     peak_sigma = []
     peak_ampl = []
-    for i in range(len(fit_peak_data)):
+    for i, _ in enumerate(fit_peak_data):
         peak_sigma.append(fit_peak_data[i][0])
         peak_centers.append(fit_peak_data[i][1])
         peak_ampl.append(fit_peak_data[i][2])
