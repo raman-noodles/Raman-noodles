@@ -1,7 +1,7 @@
 """This function takes in compounds from a dictionary from shoyu, and, using spectrafit,
 identifies peaks found in both the fed-in known spectra, as well as the unknown spectra
 to be analyzed. From that identification, it then classifies the peaks in the unknown
-spectra based on the fed-in known spectra. 
+spectra based on the fed-in known spectra.
  """
 import math
 import pickle
@@ -12,9 +12,10 @@ from ramannoodles import spectrafit
 from ramannoodles import shoyu
 
 
-def peak_assignment(unknown_x, unknown_y, known_compound_list, precision = 0.03, plot = True):
+def peak_assignment(unknown_x, unknown_y, known_compound_list, 
+                    precision = 0.03, plot = True):
     """This function is a wrapper function from which all classification of peaks occurs."""
- 
+
     #Handling errors in inputs.
     if not isinstance(unknown_x, list):
         raise TypeError("Passed value of `unknown_x` is not a list! Instead, it is: " + str(type(unknown_x)))
