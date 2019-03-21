@@ -1,6 +1,6 @@
 # Raman-Noodles
 <p align="center">
-  <src="https://github.com/raman-noodles/Raman-noodles/blob/master/docs/Raman%20Noodles%20Logo.PNG">
+  <img src="https://github.com/raman-noodles/Raman-noodles/blob/master/docs/Raman%20Noodles%20Logo.PNG">
 </p>
 
 ## This is the UW DIRECT Winter 2019 Team Project GitHub Repo
