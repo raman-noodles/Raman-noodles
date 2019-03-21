@@ -71,7 +71,7 @@ def add_jdx(filename, label=None):
     if not isinstance(filename, str):
         raise TypeError("Passed value of `filename` is not a string! Instead, it is: "
                         + str(type(filename)))
-    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     data = jcamp.JCAMP_reader(filename)
     y_abs = 1 - data['y']
     data['yunits'] = 'ABSORBANCE'
