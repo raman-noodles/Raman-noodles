@@ -11,6 +11,7 @@ Developed by the Raman-Noodles team.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import lmfit
 from lmfit.models import LorentzianModel
 from peakutils.baseline import baseline
 from scipy.signal import find_peaks
@@ -37,6 +38,10 @@ def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
     Returns:
         y_out (list like): The baselined values of the y-axis.
     """
+    # handling errors in inputs
+    if not isinstance(y_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(y_data)))
     y_base = baseline(y_data, deg=deg, max_it=200)
     # to avoid strange results,
     # change all negative values to zero
@@ -44,7 +49,7 @@ def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
     y_out = y_data - yb_plus
     # plot that lets you see the baseline fitting
     if plot and x_data is None:
-        print('Please add x_data as input to plot')
+        raise ValueError('Please add x_data as input to plot')
     elif plot:
         plt.figure(figsize=(10, 4))
         plt.plot(x_data, y_data, 'b--', label='input')
@@ -88,6 +93,22 @@ def peak_detect(x_data, y_data, height=0.1, prominence=0.1, distance=10):
                           detected peaks as well as other attributes such as the prominence
                           and height.
     """
+    # handling errors in inputs
+    if not isinstance(x_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `x_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(x_data)))
+    if not isinstance(y_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(y_data)))
+    if not isinstance(height, (int, float)):
+        raise TypeError('Passed value of `height` is not a int or a float! Instead, it is: '
+                        + str(type(height)))
+    if not isinstance(prominence, (int, float)):
+        raise TypeError('Passed value of `prominence` is not a int or a float! Instead, it is: '
+                        + str(type(prominence)))
+    if not isinstance(distance, (int, float)):
+        raise TypeError('Passed value of `distance` is not a int or a float! Instead, it is: '
+                        + str(type(distance)))
     # find peaks
     peak_list = find_peaks(y_data, height=height, prominence=prominence, distance=distance)
     # convert peak indexes to data values
@@ -125,6 +146,14 @@ def lorentz_params(peaks):
                         to correspond to real data. Finally, the amplitude for the peak was set
                         to a minimum of 0, to prevent negatives.
     """
+    # handling errors in inputs
+    if not isinstance(peaks, list):
+        raise TypeError('Passed value of `peaks` is not a list! Instead, it is: '
+                        + str(type(peaks)))
+    for i, _ in enumerate(peaks):
+        if not isinstance(peaks[i], tuple):
+                raise TypeError('Passed value of `peaks[{}]` is not a tuple. Instead, it is: '.format(i)
+                                + str(type(peaks[i])))
     peak_list = []
     for i, _ in enumerate(peaks):
         prefix = 'p{}_'.format(i+1)
@@ -177,6 +206,22 @@ def model_fit(x_data, y_data, mod, pars, report=False):
         out (lmfit.model.ModelResult): An lmfit model class that contains all of the fitted values
                         for the input model.
     """
+    # handling errors in inputs
+    if not isinstance(x_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `x_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(x_data)))
+    if not isinstance(y_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(y_data)))
+    if not isinstance(mod, lmfit.model.CompositeModel):
+        raise TypeError('Passed value of `mod` is not a lmfit.model.CompositeModel! Instead, it is: '
+                        + str(type(mod)))
+    if not isinstance(pars, lmfit.parameter.Parameters):
+        raise TypeError('Passed value of `pars` is not a lmfit.parameter.Parameters! Instead, it is: '
+                        + str(type(pars)))
+    if not isinstance(report, bool):
+        raise TypeError('Passed value of `report` is not a boolean! Instead, it is: '
+                        + str(type(report)))
     # fit model
     out = mod.fit(y_data, pars, x=x_data)
     if report:
@@ -204,6 +249,19 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
     Returns:
         None
     """
+    # handling errors in inputs
+    if not isinstance(x_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `x_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(x_data)))
+    if not isinstance(y_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(y_data)))
+    if not isinstance(fit_result, lmfit.model.ModelResult):
+        raise TypeError('Passed value of `fit_result` is not a lmfit.model.ModelResult! Instead, it is: '
+                        + str(type(fit_result)))
+    if not isinstance(plot_components, bool):
+        raise TypeError('Passed value of `plot_components` is not a boolean! Instead, it is: '
+                        + str(type(plot_components)))
     plt.figure(figsize=(15, 6))
     plt.ylabel('Counts (Normalized)', fontsize=14)
     plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
@@ -239,6 +297,10 @@ def export_fit_data(out):
                             fit_peak_data[i][3] = p[i]_fwhm
                             fit_peak_data[i][4] = p[i]_height
     """
+    # handling errors in inputs
+    if not isinstance(out, lmfit.model.ModelResult):
+        raise TypeError('Passed value of `out` is not a lmfit.model.ModelResult! Instead, it is: '
+                        + str(type(out)))
     fit_peak_data = []
     for i in range(int(len(out.values)/5)):
         peak = np.zeros(5)

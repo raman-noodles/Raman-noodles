@@ -33,7 +33,7 @@ def download_cas(cas_num):
     """
     # handling errors in inputs
     if not isinstance(cas_num, str):
-        raise TypeError("Passed value of `cas_num` is not a string! Instead, it is: "
+        raise TypeError('Passed value of `cas_num` is not a string! Instead, it is: '
                         + str(type(cas_num)))
     # drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
