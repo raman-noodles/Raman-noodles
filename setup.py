@@ -20,5 +20,4 @@ setup(name='ramannoodles',
                         'matplotlib',
                         'scipy', 
                         'lmfit', 
-                        'peakutils', 
-                        'math'])
+                        'peakutils'])
