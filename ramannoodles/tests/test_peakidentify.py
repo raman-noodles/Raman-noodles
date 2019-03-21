@@ -423,17 +423,17 @@ def test_score_max():
               "and was handled correctly.")
 
     # Run good examples
-    maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, k)
-    arrmaxscores, arrmaxpeaks = peakidentify.score_max(arraya[0], arraya[1], k)
+    maxscores = peakidentify.score_max(row_i, row_j, k)
+    arrmaxscores = peakidentify.score_max(arraya[0], arraya[1], k)
 
     # make assertions
     assert len(arrmaxscores) == len(arraycat), """Output list length different
     than concatenated lists length"""
-    for i, _ in enumerate(arraycat):
-        assert 0 <= arrmaxscores[i] <= 2, 'Output value outside acceptable range'
-        assert 0 <= maxscores[i] <= 2, 'Output value outside acceptable range'
+    for i, _ in enumerate(rowcat):
+        assert 0 <= arrmaxscores[0][i] <= 2, 'Output value outside acceptable range'
+        assert 0 <= maxscores[0][i] <= 2, 'Output value outside acceptable range'
     for i, _ in enumerate(maxscores, 1):
-        assert maxscores[i-1] >= maxscores[-1], 'Output values are less than the max value'
+        assert maxscores[0][i-1] >= maxscores[0][-1], 'Output values are less than the max value'
 
 
 def test_score_sort():
@@ -446,12 +446,12 @@ def test_score_sort():
     k = 2
     arraycat = np.concatenate((arraya[0], arraya[1]))
     # Run Previous Function to get max score normalization
-    maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, k)
+    maxscores = peakidentify.score_max(row_i, row_j, k)
 
     # Run Function for lists
 
     try:
-        sortedscores = peakidentify.score_sort(row_i, row_j, max(maxscores))
+        sortedscores = peakidentify.score_sort(row_i, row_j, max(maxscores[0]))
 
     except TypeError:
 
@@ -462,7 +462,7 @@ def test_score_sort():
 
     try:
 
-        arrsortedscores = peakidentify.score_sort(arraya[0], arraya[1], max(maxscores))
+        arrsortedscores = peakidentify.score_sort(arraya[0], arraya[1], max(maxscores[0]))
 
     except TypeError:
 
