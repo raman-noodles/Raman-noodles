@@ -20,7 +20,7 @@ def test_download_cas():
     shoyu.download_cas(cas_num)
     assert os.path.isdir('raman_spectra/'), 'directory not found'
     assert os.path.isfile('raman_spectra/7732185_NIST_IR.jdx'), 'file not saved correctly'
-    #Various try statements to make sure that bad inputs are handled correctly. 
+    #Various try statements to make sure that bad inputs are handled correctly.
     try:
         shoyu.download_cas(7732185)
     except TypeError:
@@ -43,7 +43,7 @@ def test_add_jdx():
         shoyu.download_cas(1)
     except TypeError:
         print('An int was passed to the function, and it was handled well with a TypeError.')
-    
+
 
 def test_initialize_standard_library():
     """
@@ -100,7 +100,7 @@ def test_interpolate_spectra():
     try:
         shoyu.interpolate_spectra([1, 2, 3, 4])
     except TypeError:
-        print('A list of ints was passed to the function, and it was handled well with a TypeError.')
+        print('A list of ints was passed to the function, and was handled well with a TypeError.')
 
 
 def test_sum_spectra():
@@ -118,7 +118,7 @@ def test_sum_spectra():
     assert len(x_combined) == len(y_combined), 'Output data lengths do not match'
     assert isinstance(x_combined, np.ndarray), 'x_combined type is not a numpy.ndarray.'
     assert isinstance(y_combined, np.ndarray), 'y_combined type is not a numpy.ndarray.'
-    try:    
+    try:
         shoyu.sum_spectra(1.2, comp2_data_int)
     except TypeError:
         print('A float was passed to the function, and it was handled well with a TypeError.')

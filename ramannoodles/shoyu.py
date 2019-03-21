@@ -198,7 +198,7 @@ def interpolate_spectra(comp_data_clean):
     if not isinstance(comp_data_clean, list):
         raise TypeError('Passed value of `comp_data_clean` is not a list! Instead, it is: '
                         + str(type(comp_data_clean)))
-    for i, _ in enumerate(comp_data_clean): 
+    for i, _ in enumerate(comp_data_clean):
         if not isinstance(comp_data_clean[i], tuple):
             raise TypeError('Component of the passed value is not a tuple! Instead, it is: '
                             + str(type(comp_data_clean[i])))
