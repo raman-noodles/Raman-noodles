@@ -34,9 +34,9 @@ A user will be able to follow the steps to apply Raman-Noodles to YOUR *Formic A
 
 ### Future Work
 The team will continue working on this project in Spring of 2019 as apart of DIRECT program. Future tasks include:
-1. Increasing fuctionality of code for different substances beyond Formic Acid
-    a. Increasing the size of the library of component Raman Spectra
-    b. Creating and using an open internal database stored and accessable via a Google Drive Team folder. 
+1. Increasing fuctionality of code for different substances beyond Formic Acid. 
+  * Increasing the size of the library of component Raman Spectra
+  * Creating and using an open internal database stored and accessable via a Google Drive Team folder. 
 2. Applying kinetic analysis to data sets to view the change in decomposition and formation of species given different boundary conditions (temperature, resonance time, and strech goal of pressure)
 
 ### Conclusion
