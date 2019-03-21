@@ -1,0 +1,7 @@
+numpy
+jcamp
+requests
+matplotlib
+scipy
+lmfit
+peakutils
