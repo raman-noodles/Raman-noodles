@@ -405,7 +405,7 @@ def test_score_max():
     # Run Function for lists
     try:
 
-        maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, -1)
+        maxscores = peakidentify.score_max(row_i, row_j, -1)
 
     except ValueError:
 
@@ -415,7 +415,7 @@ def test_score_max():
      # Run Function for arrays
     try:
 
-        arrmaxscores, arrmaxpeaks = peakidentify.score_max(arraya[0], arraya[1], -1)
+        arrmaxscores = peakidentify.score_max(arraya[0], arraya[1], -1)
 
     except ValueError:
 
@@ -427,7 +427,7 @@ def test_score_max():
     arrmaxscores = peakidentify.score_max(arraya[0], arraya[1], k)
 
     # make assertions
-    assert len(arrmaxscores) == len(arraycat), """Output list length different
+    assert len(arrmaxscores[0]) == len(arraycat), """Output list length different
     than concatenated lists length"""
     for i, _ in enumerate(rowcat):
         assert 0 <= arrmaxscores[0][i] <= 2, 'Output value outside acceptable range'
@@ -470,10 +470,10 @@ def test_score_sort():
               "and was handled correctly.")
 
     # Run good examples
-    sortedscores = peakidentify.score_sort(row_i, row_j, int(max(maxscores)))
+    sortedscores = peakidentify.score_sort(row_i, row_j, int(max(maxscores[0])))
     arrsortedscores = peakidentify.score_sort(arraya[0],
                                               arraya[1],
-                                              int(max(maxscores)))
+                                              int(max(maxscores[0])))
     # make assertions
     assert len(arraycat) == len(arrsortedscores[0][0]), """Output list length
     different than concatenated lists length"""
