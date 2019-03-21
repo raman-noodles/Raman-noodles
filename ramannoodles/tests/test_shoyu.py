@@ -99,15 +99,15 @@ def test_interpolate_spectra():
         print('A list of ints was passed to the function, and it was handled well with a TypeError.')
 
 
-# def test_sum_spectra():
-#     """
-#     docstring
-#     """
-#     compound1 = SHOYU_DATA_DICT['WATER']
-#     compound2 = SHOTU_DATA_DICT['CARBON MONOXIDE']
-#     comp_data_clean = shoyu.clean_spectra(compound)
-#     comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
-#     x_combined, y_combined = shoyu.sum_spectra(comp1_data_int)
+def test_sum_spectra():
+    """
+    docstring
+    """
+    compound1 = SHOYU_DATA_DICT['WATER']
+    compound2 = SHOTU_DATA_DICT['CARBON MONOXIDE']
+    comp_data_clean = shoyu.clean_spectra(compound)
+    comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
+    x_combined, y_combined = shoyu.sum_spectra(comp1_data_int)
 
 
 def test_combine_spectra():
