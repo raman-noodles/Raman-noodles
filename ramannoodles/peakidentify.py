@@ -357,5 +357,6 @@ def score_sort(row_i, row_j, k):
 
     sortedscores = []
     sortedscores.append(score_max(row_i, row_j, k))
+    sortedscores.sort()
 
     return sortedscores
