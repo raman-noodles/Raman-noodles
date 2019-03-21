@@ -11,7 +11,7 @@ setup(name='ramannoodles',
       long_description=long_description,
       long_description_content_type="text/markdown",
       license='MIT',
-      packages=['ramannoodles'])
+      packages=['ramannoodles'],
       install_requires=['numpy',
                         'os',
                         'pickle',
@@ -21,4 +21,4 @@ setup(name='ramannoodles',
                         'scipy', 
                         'lmfit', 
                         'peakutils', 
-                        'math']
+                        'math'])
