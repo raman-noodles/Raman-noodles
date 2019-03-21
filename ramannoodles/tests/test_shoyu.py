@@ -4,6 +4,7 @@ Test functions for the shoyu.py module
 
 import os
 import pickle
+import numpy as np
 from ramannoodles import shoyu
 
 # open spectra library
@@ -73,7 +74,9 @@ def test_more_please():
 
 def test_clean_spectra():
     """
-    docstring
+    Test function for shoyu.clean_spectra. It verifies that the output type is correct,
+    that repeated data points were removed from the input data, and that bad input types
+    are handled correctly.
     """
     compound = SHOYU_DATA_DICT['WATER']
     comp_data_clean = shoyu.clean_spectra(compound)
@@ -87,7 +90,8 @@ def test_clean_spectra():
 
 def test_interpolate_spectra():
     """
-    docstring
+    Test function for shoyu.interpolate_spectra. It verifies that the output type is correct,
+    and that bad input types are handled correctly.
     """
     compound = SHOYU_DATA_DICT['WATER']
     comp_data_clean = shoyu.clean_spectra(compound)
@@ -101,13 +105,27 @@ def test_interpolate_spectra():
 
 def test_sum_spectra():
     """
-    docstring
+    Test function for shoyu.sum_spectra. It checks to confirm that the output data lengths match,
+    that the output types are correct, and that bad input types are handled well.
     """
     compound1 = SHOYU_DATA_DICT['WATER']
-    compound2 = SHOTU_DATA_DICT['CARBON MONOXIDE']
-    comp_data_clean = shoyu.clean_spectra(compound)
-    comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
-    x_combined, y_combined = shoyu.sum_spectra(comp1_data_int)
+    compound2 = SHOYU_DATA_DICT['CARBON MONOXIDE']
+    comp1_data_clean = shoyu.clean_spectra(compound1)
+    comp2_data_clean = shoyu.clean_spectra(compound2)
+    comp1_data_int = shoyu.interpolate_spectra(comp1_data_clean)
+    comp2_data_int = shoyu.interpolate_spectra(comp2_data_clean)
+    x_combined, y_combined = shoyu.sum_spectra(comp1_data_int, comp2_data_int)
+    assert len(x_combined) == len(y_combined), 'Output data lengths do not match'
+    assert isinstance(x_combined, np.ndarray), 'x_combined type is not a numpy.ndarray.'
+    assert isinstance(y_combined, np.ndarray), 'y_combined type is not a numpy.ndarray.'
+    try:    
+        shoyu.sum_spectra(1.2, comp2_data_int)
+    except TypeError:
+        print('A float was passed to the function, and it was handled well with a TypeError.')
+    try:
+        shoyu.sum_spectra(comp1_data_int, 66.6)
+    except TypeError:
+        print('A float was passed to the function, and it was handled well with a TypeError.')
 
 
 def test_combine_spectra():
@@ -127,3 +145,11 @@ def test_combine_spectra():
     output data contains values below the minimum range of either compound"""
     assert max(ranges) >= max(data[0]), """
     output data contains values above the maximum range of either compound"""
+    try:
+        shoyu.combine_spectra([1, 2, 3, 4], compound_2)
+    except TypeError:
+        print('A list was passed to the function, and it was handled well with a TypeError.')
+    try:
+        shoyu.combine_spectra(compound_1, [1, 2, 3, 4])
+    except TypeError:
+        print('A list was passed to the function, and it was handled well with a TypeError.')
