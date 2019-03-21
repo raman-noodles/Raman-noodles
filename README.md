@@ -29,7 +29,7 @@ The project can be thought of as broken down into 3 steps:
 These three sections have their own wiki documents and filled juypter notebooks with more detail included throught, see those for more detail on the individual steps.
 
 ### User Flow and Example of Using Raman Noodles
-A user will be able to follow the steps to apply Raman-Noodles to YOUR *Formic Acid* data set. An example of using the software can be seen in the [Example Use Case Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Example-of-Raman-Noodle-Use)
+A user will be able to follow the steps to apply Raman-Noodles to YOUR *Formic Acid* data set. An example of using the software can be seen in the [Example Use Case Wiki Page](https://github.com/raman-noodles/Raman-noodles/wiki/Full-Example-of-Raman-Noodle-Suite)
 
 
 ### Future Work
