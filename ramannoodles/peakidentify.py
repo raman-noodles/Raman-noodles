@@ -221,8 +221,8 @@ def plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, unknown_peak_
     #Now we need to check the elements within the unknown_peak_assignment
     #to make sure they are correct.
     for i, _ in enumerate(unknown_peak_assignments):
-        if not isinstance(unknown_peak_assignments[i], (str, list)):
-            raise TypeError("""Passed value within `unknown_peak_assignment` is not correct!
+        if not isinstance(unknown_peak_assignments[i], str):
+            raise TypeError("""Passed value within `unknown_peak_assignment` is not a string!
             Instead, it is: """ + str(type(unknown_peak_assignments[i])))
 
     colors = ['b', 'r', 'g', 'c', 'm', 'y', 'b']
@@ -267,7 +267,7 @@ def peak_1d_score(row_i, row_j, scoremax):
         raise TypeError("""Passed value of `scoremax` is not a float or int!
         Instead, it is: """ + str(type(scoremax)))
     if scoremax < 0:
-        raise TypeError("""Passed value of `scoremax` is not within bounds!""")
+        raise ValueError("""Passed value of `scoremax` is not within bounds!""")
 
     # Initializing the variables
     scores = []
@@ -314,15 +314,16 @@ def score_max(row_i, row_j, k):
     if not isinstance(k, int):
         raise TypeError("""Passed value of `k` is not an int!
         Instead, it is: """ + str(type(k)))
-    if k > 0:
-        raise TypeError("""Passed value of `k` is not within bounds!""")
+    if k < 0:
+        raise ValueError("""Passed value of `k` is not within bounds!""")
     try:
         scoremax = sorted(set(peak_1d_score(row_i, row_j, 1)[0][:]))[-k]
         maxscores, maxpeaks = peak_1d_score(row_i, row_j, scoremax)
 
     except ValueError():
         print("""Function handed a bad value, therefore
-        the ValueError was handled in the exception""")
+        the ValueError was handled in the exception. The variable
+        scoremax has been reset back to 1.""")
 
         maxscores, maxpeaks = peak_1d_score(row_i, row_j, scoremax=1)
 
@@ -351,8 +352,8 @@ def score_sort(row_i, row_j, k):
     if not isinstance(k, int):
         raise TypeError("""Passed value of `k` is not an int!
         Instead, it is: """ + str(type(k)))
-    if k > 0:
-        raise TypeError("""Passed value of `k` is not within bounds!""")
+    if k < 0:
+        raise ValueError("""Passed value of `k` is not within bounds!""")
 
     sortedscores = []
     sortedscores.append(score_max(row_i, row_j, k))
