@@ -320,7 +320,7 @@ def score_max(row_i, row_j, k):
         scoremax = sorted(set(peak_1d_score(row_i, row_j, 1)[0][:]))[-k]
         maxscores, maxpeaks = peak_1d_score(row_i, row_j, scoremax)
 
-    except ValueError():
+    except Exception as e:
         print("""Function handed a bad value, therefore
         the ValueError was handled in the exception. The variable
         scoremax has been reset back to 1.""")
