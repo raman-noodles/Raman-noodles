@@ -49,7 +49,7 @@ def test_peak_detect():
     assert isinstance(peaks[0], tuple), 'first peak data is not a tuple'
     assert min(X_TEST) <= peaks[0][0] <= max(X_TEST), '1st peak center is outside data range'
     assert 0 <= peaks[0][1] <= 1, '1st peak maximum is outside acceptable range'
-    assert len(peaks) == len(peak_list), 'Number of peak indeces different than number of peak data'
+    assert len(peaks) == len(peak_list[0]), 'Number of peak indeces different than number of peak data'
 
 
 def test_lorentz_params():
