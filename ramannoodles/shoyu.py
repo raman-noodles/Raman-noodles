@@ -194,6 +194,14 @@ def interpolate_spectra(comp_data_clean):
         comp_data_int (list): list of interpolated values for the spectra at integer
                               values across the range of the input data
     """
+    # handling errors in inputs
+    if not isinstance(comp_data_clean, list):
+        raise TypeError('Passed value of `comp_data_clean` is not a list! Instead, it is: '
+                        + str(type(comp_data_clean)))
+    for i, _ in enumerate(comp_data_clean): 
+        if not isinstance(comp_data_clean[i], tuple):
+            raise TypeError('Component of the passed value is not a tuple! Instead, it is: '
+                            + str(type(comp_data_clean[i])))
     # unzip data
     x_comp, y_comp = zip(*comp_data_clean)
     # interpolate data
@@ -207,7 +215,7 @@ def interpolate_spectra(comp_data_clean):
     return comp_data_int
 
 
-def add_spectra(comp1_data_int, comp2_data_int):
+def sum_spectra(comp1_data_int, comp2_data_int):
     """
     Function that adds the interpolated values for two spectra together.
 
@@ -261,7 +269,7 @@ def combine_spectra(compound_1, compound_2, plot=False):
     data2 = clean_spectra(compound_2)
     comp1_data_int = interpolate_spectra(data1)
     comp2_data_int = interpolate_spectra(data2)
-    x_combined, y_combined = add_spectra(comp1_data_int, comp2_data_int)
+    x_combined, y_combined = sum_spectra(comp1_data_int, comp2_data_int)
     if plot:
         # plot original data and combined plot
         plt.figure(figsize=(15, 5))

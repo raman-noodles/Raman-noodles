@@ -85,10 +85,29 @@ def test_clean_spectra():
         print('A list was passed to the function, and it was handled well with a TypeError.')
 
 
-# def test_interpolate_spectra():
-#     compound = shoyu_data_dict['WATER']
+def test_interpolate_spectra():
+    """
+    docstring
+    """
+    compound = SHOYU_DATA_DICT['WATER']
+    comp_data_clean = shoyu.clean_spectra(compound)
+    comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
+    assert isinstance(comp_data_int, list), 'Output type not correct, a list is expected'
+    try:
+        shoyu.interpolate_spectra([1, 2, 3, 4])
+    except TypeError:
+        print('A list of ints was passed to the function, and it was handled well with a TypeError.')
+
+
+# def test_sum_spectra():
+#     """
+#     docstring
+#     """
+#     compound1 = SHOYU_DATA_DICT['WATER']
+#     compound2 = SHOTU_DATA_DICT['CARBON MONOXIDE']
 #     comp_data_clean = shoyu.clean_spectra(compound)
 #     comp_data_int = shoyu.interpolate_spectra(comp_data_clean)
+#     x_combined, y_combined = shoyu.sum_spectra(comp1_data_int)
 
 
 def test_combine_spectra():
