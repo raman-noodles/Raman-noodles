@@ -12,12 +12,4 @@ setup(name='ramannoodles',
       long_description_content_type="text/markdown",
       license='MIT',
       packages=['ramannoodles'],
-      install_requires=['numpy',
-                        'os',
-                        'pickle',
-                        'jcamp',
-                        'requests',
-                        'matplotlib',
-                        'scipy', 
-                        'lmfit', 
-                        'peakutils'])
+      install_requires=['numpy', 'jcamp', 'requests', 'matplotlib', 'scipy', 'lmfit', 'peakutils'])
