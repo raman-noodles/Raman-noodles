@@ -198,7 +198,7 @@ def interpolate_spectra(comp_data_clean):
     if not isinstance(comp_data_clean, list):
         raise TypeError('Passed value of `comp_data_clean` is not a list! Instead, it is: '
                         + str(type(comp_data_clean)))
-    for i, _ in enumerate(comp_data_clean): 
+    for i, _ in enumerate(comp_data_clean):
         if not isinstance(comp_data_clean[i], tuple):
             raise TypeError('Component of the passed value is not a tuple! Instead, it is: '
                             + str(type(comp_data_clean[i])))
@@ -231,6 +231,10 @@ def sum_spectra(comp1_data_int, comp2_data_int):
         y_combined (list): list of summed y-values across the range of
                            of the two compounds
     """
+    # handling errors in inputs
+    if not isinstance(comp1_data_int, list):
+        raise TypeError('Passed value of `comp1_data_int` is not a list! Instead, it is: '
+                        + str(type(comp1_data_int)))
     # add the two spectra
     combined = sorted(comp1_data_int + comp2_data_int)
     # add by like
@@ -265,6 +269,13 @@ def combine_spectra(compound_1, compound_2, plot=False):
          y_combined (numpy array): The y-values of the new spectra that contains the
                                    combined values of the two spectra that were input.
     """
+    # handling errors in inputs
+    if not isinstance(compound_1, dict):
+        raise TypeError("Passed value of `compound_1` is not a dictionary! Instead, it is: "
+                        + str(type(compound_1)))
+    if not isinstance(compound_2, dict):
+        raise TypeError("Passed value of `compound_2` is not a dictionary! Instead, it is: "
+                        + str(type(compound_1)))
     data1 = clean_spectra(compound_1)
     data2 = clean_spectra(compound_2)
     comp1_data_int = interpolate_spectra(data1)
