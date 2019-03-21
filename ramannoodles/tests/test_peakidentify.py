@@ -113,8 +113,8 @@ def test_compare_unknown_to_known():
                            "have no matching assignments.")
 
 def test_peak_position_comparisons():
-    """This function tests the operation of the peak_position_comparisons 
-    function in peakidentify. Said function returns a list of strings that 
+    """This function tests the operation of the peak_position_comparisons
+    function in peakidentify. Said function returns a list of strings that
     contain text assignments of each peak in the unknown spectrum."""
 
     #First, generate good data.
@@ -291,22 +291,22 @@ def test_peak_1d_score():
     
     # Run Bad Function for lists
     try:
-        testscore = peak_1d_score(row_i,row_j,-1)
+        testscore = peakidentify.peak_1d_score(row_i,row_j,-1)
     except ValueError:
         print("An invalid scoremax value was passed to the function, "
               "and was handled correctly.")
         
     # Run Bad Function for arrays
     try:
-        arrayscore = peak_1d_score(arraya[0], arraya[2], -1)
+        arrayscore = peakidentify.peak_1d_score(arraya[0], arraya[2], -1)
 
     except ValueError:
         print("An invalid scoremax value was passed to the function, "
               "and was handled correctly.")
     
     # Running a good example
-    testscore = peak_1d_score(row_i,row_j,1)
-    arrayscore = peak_1d_score(arraya[0], arraya[2], 1)
+    testscore = peakidentify.peak_1d_score(row_i,row_j,1)
+    arrayscore = peakidentify.peak_1d_score(arraya[0], arraya[2], 1)
     
     # make assertions
     assert len(row_i) == len(row_j), 'Input lengths do not match'
@@ -329,20 +329,20 @@ def test_score_max():
     
     # Run Function for lists
     try:
-        maxscores,maxpeaks = score_max(row_i, row_j, -1)
+        maxscores,maxpeaks = peakidentify.score_max(row_i, row_j, -1)
     except ValueError:
         print("An invalid k value was passed to the function, "
               "and was handled correctly.")
 
      # Run Function for arrays
     try:
-        arrmaxscores, arrmaxpeaks = score_max(arraya[0], arraya[1], -1)
+        arrmaxscores, arrmaxpeaks = peakidentify.score_max(arraya[0], arraya[1], -1)
     except ValueError:
         print("An invalid k value was passed to the function, "
               "and was handled correctly.")
     # Run good examples
-    maxscores,maxpeaks = score_max(row_i, row_j, k)
-    arrmaxscores,arrmaxpeaks = score_max(arraya[0], arraya[1], k)
+    maxscores,maxpeaks = peakidentify.score_max(row_i, row_j, k)
+    arrmaxscores,arrmaxpeaks = peakidentify.score_max(arraya[0], arraya[1], k)
     # make assertions
     assert len(arrmaxscores) == len(arraycat), 'Output list length different than concatenated lists length'
     for i in range(len(arraycat)):
@@ -361,22 +361,22 @@ def test_score_sort():
     k = 2
     arraycat = np.concatenate((arraya[0], arraya[1]))
     # Run Previous Function to get max score normalization
-    maxscores,maxpeaks = score_max(row_i, row_j, k)
+    maxscores,maxpeaks = peakidentify.score_max(row_i, row_j, k)
     # Run Function for lists
     try:
-        sortedscores = score_sort(row_i, row_j, max(maxscores))
+        sortedscores = peakidentify.score_sort(row_i, row_j, max(maxscores))
     except TypeError:
         print("An invalid maxscores from score_max was passed to the function, "
               "and was handled correctly.")
     # Run Function for arrays
     try:
-        arrsortedscores = score_sort(arraya[0], arraya[1], max(maxscores))
+        arrsortedscores = peakidentify.score_sort(arraya[0], arraya[1], max(maxscores))
     except TypeError:
         print("An invalid maxscores from score_max was passed to the function, "
               "and was handled correctly.")
     # Run good examples
-    sortedscores = score_sort(row_i, row_j, int(max(maxscores)))
-    arrsortedscores = score_sort(arraya[0], arraya[1], int(max(maxscores)))
+    sortedscores = peakidentify.score_sort(row_i, row_j, int(max(maxscores)))
+    arrsortedscores = peakidentify.score_sort(arraya[0], arraya[1], int(max(maxscores)))
     # make assertions
     assert len(arraycat) == len(arrsortedscores[0][0]), 'Output list length different than concatenated lists length'
     assert len(rowcat) == len(sortedscores[0][0]), 'Output list length different than concatenated lists length'
