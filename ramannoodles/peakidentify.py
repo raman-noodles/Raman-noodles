@@ -27,12 +27,12 @@ def peak_assignment(unknown_x, unknown_y, known_compound_list,
                         + str(type(known_compound_list)))
 
     #Now we need to check the elements within the known_compound_list to make sure they are correct.
-    for i in range(len(known_compound_list)):
+    for i, _ in enumerate(known_compound_list):
         if not isinstance(known_compound_list[i], dict):
             raise TypeError("""Passed value within `known_compound_list` is not a dictionary!
             Instead, it is: """ + str(type(known_compound_list[i])))
 
-    if not (isinstance(precision, float) or isinstance(precision, int)):
+    if not isinstance(precision, (float, int)):
         raise TypeError("""Passed value of `precision` is not a float or int!
         Instead, it is: """ + str(type(precision)))
 
@@ -48,7 +48,7 @@ def peak_assignment(unknown_x, unknown_y, known_compound_list,
     known_compound_peaks = []
     assignment_matrix = []
 
-    for i in range(len(known_compound_list)):
+    for i, _ in enumerate(known_compound_list):
         known_compound_peaks.append(
             spectrafit.compound_report(known_compound_list[i])[0])
         print("The peaks that we found for "
@@ -91,14 +91,14 @@ def compare_unknown_to_known(combined_peaks, known_peaks, precision):
         raise TypeError("""Passed value of `known_peaks` is not a list!
         Instead, it is: """ + str(type(known_peaks)))
 
-    if not (isinstance(precision, float) or isinstance(precision, int)):
+    if not isinstance(precision, (float, int)):
         raise TypeError("""Passed value of `precision` is not a float or int!
         Instead, it is: """ + str(type(precision)))
 
     assignment_matrix = np.zeros(len(combined_peaks))
     peaks_found = 0
-    for i in range(len(combined_peaks)):
-        for j in range(len(known_peaks)):
+    for i, _ in enumerate(combined_peaks):
+        for j, _ in enumerate(known_peaks):
             # instead of If, call peak_1D_score
             if math.isclose(combined_peaks[i], known_peaks[j],
                             rel_tol=precision):
@@ -138,7 +138,7 @@ def peak_position_comparisons(unknown_peaks, known_compound_peaks,
         Instead, it is: """ + str(type(known_compound_list)))
 
     #Now we need to check the elements within the known_compound_list to make sure they are correct.
-    for i in range(len(known_compound_list)):
+    for i, _ in enumerate(known_compound_list):
         if not isinstance(known_compound_list[i], dict):
             raise TypeError("""Passed value within `known_compound_list` is not a dictionary!
             Instead, it is: """ + str(type(known_compound_list[i])))
@@ -150,12 +150,12 @@ def peak_position_comparisons(unknown_peaks, known_compound_peaks,
     unknown_peak_assignment = []
     #Step through the unknown peaks to make an assignment for each unknown peak.
 
-    for i in range(len(unknown_peaks)):
+    for i, _ in enumerate(unknown_peaks):
         #We might be able to make a small performance improvement if we were to somehow
         #not search the peaks we already had searched, but that seems to not be trivial.
         position_assignment = []
         #We'll need an outer loop that walks through all the different compound positions
-        for j in range(len(known_compound_peaks)):
+        for j, _ in enumerate(known_compound_peaks):
             if association_matrix[j][i] == 1:
                 position_assignment.append(known_compound_list[j]['title'])
             else:
@@ -183,7 +183,7 @@ def percentage_of_peaks_found(known_peaks, association_matrix, list_of_known_com
 
     # Now we need to check the elements within the
     # list_of_known_compounds to make sure they are correct.
-    for i in range(len(list_of_known_compounds)):
+    for i, _ in enumerate(list_of_known_compounds):
         if not isinstance(list_of_known_compounds[i], dict):
             raise TypeError("""Passed value within `list_of_known_compounds` is not a dictionary!
             Instead, it is: """ + str(type(list_of_known_compounds[i])))
@@ -193,7 +193,7 @@ def percentage_of_peaks_found(known_peaks, association_matrix, list_of_known_com
         Instead, it is: """ + str(type(association_matrix)))
 
     percentage_dict = {}
-    for i in range(len(list_of_known_compounds)):
+    for i, _ in enumerate(list_of_known_compounds):
         count_number = sum(association_matrix[i])
         percentage_dict[list_of_known_compounds[i]
                         ['title']] = (count_number / len(known_peaks[i])) * 100
@@ -220,19 +220,15 @@ def plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, unknown_peak_
 
     #Now we need to check the elements within the unknown_peak_assignment
     #to make sure they are correct.
-    for i in range(len(unknown_peak_assignment)):
-        if not isinstance(unknown_peak_assignment[i], str):
+    for i, _ in enumerate(unknown_peak_assignments):
+        if not isinstance(unknown_peak_assignments[i], str):
             raise TypeError("""Passed value within `unknown_peak_assignment` is not a string!
-            Instead, it is: """ + str(type(unknown_peak_assignment[i])))
-
-    if not isinstance(association_matrix, list):
-        raise TypeError("""Passed value of `association_matrix` is not a float or int!
-        Instead, it is: """ + str(type(association_matrix)))
+            Instead, it is: """ + str(type(unknown_peak_assignments[i])))
 
     colors = ['b', 'r', 'g', 'c', 'm', 'y', 'b']
-    fig = plt.figure(figsize=(10, 4), dpi=300)
+    #fig = plt.figure(figsize=(10, 4), dpi=300)
     plt.plot(unknown_x, unknown_y, color='black', label='Unknown Spectrum')
-    for i in range(len(unknown_peaks)):
+    for i, _ in enumerate(unknown_peaks):
         plt.axvline(x=unknown_peaks[i], color=colors[i],
                     label=unknown_peak_assignments[i],
                     linestyle='--')
@@ -263,8 +259,8 @@ def peak_1d_score(row_i, row_j, scoremax):
     scores = []
     peaks = []
 
-    for i in range(len(row_i)):
-        for j in range(len(row_j)):
+    for i, _ in enumerate(row_i):
+        for j, _ in enumerate(row_j):
             distance = np.where((row_i[i] - row_j[j] > 50), np.nan,
                                 math.sqrt(sum([math.pow(row_i[i] - row_j[j], 2)])))
             # Score for peaks less than 50 units apart
@@ -294,7 +290,9 @@ def score_max(list_input, row, k):
         scoremax = sorted(set(peak_1d_score(list_input, row, 1)[0][:]))[-k]
         maxscores, maxpeaks = peak_1d_score(list_input, row, scoremax)
 
-    except Exception as e:
+    except ValueError():
+        print("""Function handed a bad value, therefore
+        the ValueError was handled in the exception""")
 
         maxscores, maxpeaks = peak_1d_score(list_input, row, scoremax=1)
 
