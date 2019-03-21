@@ -152,8 +152,8 @@ def lorentz_params(peaks):
                         + str(type(peaks)))
     for i, _ in enumerate(peaks):
         if not isinstance(peaks[i], tuple):
-                raise TypeError('Passed value of `peaks[{}]` is not a tuple. Instead, it is: '.format(i)
-                                + str(type(peaks[i])))
+            raise TypeError("""Passed value of `peaks[{}]` is not a tuple.
+             Instead, it is: """.format(i) + str(type(peaks[i])))
     peak_list = []
     for i, _ in enumerate(peaks):
         prefix = 'p{}_'.format(i+1)
@@ -214,11 +214,11 @@ def model_fit(x_data, y_data, mod, pars, report=False):
         raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
                         + str(type(y_data)))
     if not isinstance(mod, lmfit.model.CompositeModel):
-        raise TypeError('Passed value of `mod` is not a lmfit.model.CompositeModel! Instead, it is: '
-                        + str(type(mod)))
+        raise TypeError("""Passed value of `mod` is not a lmfit.model.CompositeModel!
+         Instead, it is: """ + str(type(mod)))
     if not isinstance(pars, lmfit.parameter.Parameters):
-        raise TypeError('Passed value of `pars` is not a lmfit.parameter.Parameters! Instead, it is: '
-                        + str(type(pars)))
+        raise TypeError("""Passed value of `pars` is not a lmfit.parameter.Parameters!
+         Instead, it is: """ + str(type(pars)))
     if not isinstance(report, bool):
         raise TypeError('Passed value of `report` is not a boolean! Instead, it is: '
                         + str(type(report)))
@@ -257,8 +257,8 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
         raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
                         + str(type(y_data)))
     if not isinstance(fit_result, lmfit.model.ModelResult):
-        raise TypeError('Passed value of `fit_result` is not a lmfit.model.ModelResult! Instead, it is: '
-                        + str(type(fit_result)))
+        raise TypeError("""Passed value of `fit_result` is not a lmfit.model.ModelResult!
+         Instead, it is: """ + str(type(fit_result)))
     if not isinstance(plot_components, bool):
         raise TypeError('Passed value of `plot_components` is not a boolean! Instead, it is: '
                         + str(type(plot_components)))
@@ -330,6 +330,10 @@ def compound_report(compound):
         xmin (float): The minimum wavenumber value in the compound data
         xmax (float): The maximum wavenumber value in the compound data
     """
+    # handling errors in inputs
+    if not isinstance(compound, dict):
+        raise TypeError('Passed value of `compound` is not a dict! Instead, it is: '
+                        + str(type(compound)))
     x_data = compound['x']
     y_data = compound['y']
     # subtract baseline
@@ -353,6 +357,7 @@ def compound_report(compound):
     xmax = max(x_data)
     return peak_centers, peak_sigma, peak_ampl, xmin, xmax
 
+
 def data_report(x_data, y_data):
     """
     Wrapper fucntion that utilizes many of the functions
@@ -371,6 +376,13 @@ def data_report(x_data, y_data):
         xmin (float): The minimum wavenumber value in the compound data
         xmax (float): The maximum wavenumber value in the compound data
     """
+    # handling errors in inputs
+    if not isinstance(x_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `x_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(x_data)))
+    if not isinstance(y_data, (list, np.ndarray)):
+        raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
+                        + str(type(y_data)))
     # subtract baseline
     y_data = subtract_baseline(y_data)
     # detect peaks

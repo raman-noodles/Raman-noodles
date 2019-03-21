@@ -65,9 +65,11 @@ def test_peak_detect():
     assert isinstance(peaks, list), 'expected output is list'
     assert isinstance(peaks[0], tuple), 'first peak data is not a tuple'
     for i, _ in enumerate(peaks):
-        assert min(X_TEST) <= peaks[i][0] <= max(X_TEST), 'Peak {} center is outside data range'.format(i)
+        assert min(X_TEST) <= peaks[i][0] <= max(X_TEST), """
+        Peak {} center is outside data range""".format(i)
     assert 0 <= peaks[0][1] <= 1, '1st peak maximum is outside acceptable range'
-    assert len(peaks) == len(peak_list[0]), 'Number of peak indeces different than number of peak data'
+    assert len(peaks) == len(peak_list[0]), """
+    Number of peak indeces different than number of peak data"""
     try:
         spectrafit.peak_detect(1.1, y_test)
     except TypeError:
@@ -93,7 +95,7 @@ def test_peak_detect():
 def test_lorentz_params():
     """
     Test function that confirms spectrafit.lorentz_params behaves as expected. It confirms that
-    the output types are correct, that the number of parameters is proportional to the number 
+    the output types are correct, that the number of parameters is proportional to the number
     of peaks, and that input type errors are handled.
     """
     y_test = spectrafit.subtract_baseline(Y_TEST)
@@ -109,14 +111,16 @@ def test_lorentz_params():
     try:
         spectrafit.lorentz_params([1, 2, 3, 4])
     except TypeError:
-        print('A list of ints was passed to the function, and it was handled well with a TypeError.')
+        print("""A list of ints was passed to the function,
+         and it was handled well with a TypeError.""")
 
 
 def test_model_fit():
     """
-    Test function that confirms spectrafit.model_fit behaves as expected. It confirms that the output
-    types are correct, that the size of the fit data matches the input, that the the number of output
-    values is equal to the number of input parameters, and that input type errors are handled.
+    Test function that confirms spectrafit.model_fit behaves as expected. It confirms that
+    the output types are correct, that the size of the fit data matches the input, that the
+    the number of output values is equal to the number of input parameters, and that input
+    type errors are handled.
     """
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
@@ -158,29 +162,33 @@ def test_plot_fit():
     mod, pars = spectrafit.lorentz_params(peaks)
     out = spectrafit.model_fit(X_TEST, y_test, mod, pars)
     try:
-        spectrafit.plot_fit(1.2, y_test, mod, pars)
+        spectrafit.plot_fit(1.2, y_test, out)
     except TypeError:
         print('A float was passed to the function, and was handled well with a TypeError.')
     try:
-        spectrafit.plot_fit(X_TEST, 1.3, mod, pars)
+        spectrafit.plot_fit(X_TEST, 1.3, out)
     except TypeError:
         print('A float was passed to the function, and was handled well with a TypeError.')
     try:
-        spectrafit.plot_fit(X_TEST, y_test, 1.4, pars)
+        spectrafit.plot_fit(X_TEST, y_test, 1.4)
     except TypeError:
         print('A float was passed to the function, and was handled well with a TypeError.')
     try:
-        spectrafit.plot_fit(X_TEST, y_test, mod, [1, 2, 3, 4])
+        spectrafit.plot_fit(X_TEST, y_test, [1, 2, 3, 4])
     except TypeError:
         print('A list was passed to the function, and was handled well with a TypeError.')
     try:
-        spectrafit.plot_fit(X_TEST, y_test, mod, pars, plot_components='yup!')
+        spectrafit.plot_fit(X_TEST, y_test, out, plot_components='yup!')
     except TypeError:
         print('A str was passed to the function, and was handled well with a TypeError.')
 
 
 def test_export_fit_data():
-    """docstring"""
+    """
+    Test function that confirms spectrafit.export_fit_data behaves as expected. It confirms that the
+    output type is correct, that the output shape is correct, that the number of peaks in the report
+    is correct, and the input type errors are handled.
+    """
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
     mod, pars = spectrafit.lorentz_params(peaks)
@@ -190,11 +198,42 @@ def test_export_fit_data():
     assert np.asarray(fit_peak_data).shape == (int(len(out.values)/5), 5), """
     output is not the correct shape"""
     assert len(fit_peak_data) == int(len(out.values)/5), 'incorrect number of peaks exported'
+    try:
+        spectrafit.export_fit_data(mod)
+    except TypeError:
+        print('A str was passed to the function, and was handled well with a TypeError.')
 
 
 def test_compound_report():
-    """docstring"""
+    """
+    Test function that confirms spectrafit.compound_report behaves as expected.
+    """
     compound = SHOYU_DATA_DICT['WATER']
     data = spectrafit.compound_report(compound)
     assert len(data) == 5, 'more values in return than expected'
     assert len(data[0]) == 3, 'more than three peaks detected for WATER'
+    assert isinstance(data, tuple), 'output data type is not a tuple'
+    try:
+        spectrafit.compound_report('water')
+    except TypeError:
+        print('A str was passed to the function, and was handled well with a TypeError.')
+
+
+
+def test_data_report():
+    """
+    Test function that confirms spectrafit.data_report behaves as expected.
+    """
+    compound = SHOYU_DATA_DICT['WATER']
+    data = spectrafit.data_report(compound['x'], compound['y'])
+    assert len(data) == 5, 'more values in return than expected'
+    assert len(data[0]) == 3, 'more than three peaks detected for WATER'
+    assert isinstance(data, tuple), 'output data type is not a tuple'
+    try:
+        spectrafit.data_report(1.1, compound['y'])
+    except TypeError:
+        print('A float was passed to the function, and was handled well with a TypeError.')
+    try:
+        spectrafit.data_report(compound['x'], 1.2)
+    except TypeError:
+        print('A float was passed to the function, and was handled well with a TypeError.')
