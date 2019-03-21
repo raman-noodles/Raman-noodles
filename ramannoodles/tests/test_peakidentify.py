@@ -207,6 +207,7 @@ def test_peak_position_comparisons():
     assert test_peak_labels[2][0] == 'WATER', """The funciton is
     not correctly assigning peaks when association matrix = 1"""
 
+
 def test_percentage_of_peaks_found():
     """This function tests the operation of the
     percentage_of_peaks_found function in peakidentify.py"""
@@ -354,6 +355,7 @@ def test_plotting_peak_assignments():
         print("""The function correctly handled the case when an int
         was passed in the unknown_peak_assignment list""")
 
+
 def test_peak_1d_score():
     """Evaluates the functionality of the peak_1D_score function"""
     # Initialize the test arguments
@@ -475,6 +477,7 @@ def test_score_sort():
                                               arraya[1],
                                               int(max(maxscores)))
     # make assertions
+<<<<<<< HEAD
     assert len(arraycat) == len(arrsortedscores[0][0]), """Output list length
     different than concatenated lists length"""
     assert len(rowcat) == len(sortedscores[0][0]), """Output list length
@@ -484,3 +487,10 @@ def test_score_sort():
         is sorted from smallest to largest"""
         assert arrsortedscores[0][0][i] <= arrsortedscores[0][0][i+1], """Output
         values is sorted from smallest to largest"""
+=======
+    assert len(arraycat) == len(arrsortedscores[0][0]), 'Output list length different than concatenated lists length'
+    assert len(rowcat) == len(sortedscores[0][0]), 'Output list length different than concatenated lists length'
+    for i,_ in enumerate(sortedscores):
+        assert sortedscores[0][0][i] <= sortedscores[0][0][i+1], 'Output values is sorted from smallest to largest'
+        assert arrsortedscores[0][0][i] <= arrsortedscores[0][0][i+1], 'Output values is sorted from smallest to largest'
+>>>>>>> d92747896714f70c81d91b5654f858461b8d8e92
