@@ -16,9 +16,7 @@ This project identifies components in a Raman spectra. Advantages to using this 
 ### Assumptions and Project Scope
 1. Storing data library that is beyond the decomposition products of formic acid (hydrogen, water, carbon dioxide, carbon monoxide) are not included as other components are beyond the scope of the project at this time.
 - Assumed that the user is trying to analyze the decomposition products of formic acid, or a mixture that consists only of: Formic Acid, Hydrogen, Water, Carbon dioxide, Carbon monoxide.
-2. This project will not be predictive - that is, it will require the user to specifically input what potential compounds will be 
-present in the spectra to be analyzed. This list does not have to be exhaustive; however, the more inclusive the list, the better
-the fitting and predicting results will be. 
+2. This project will not be predictive - that is, it will require the user to specifically input what potential compounds will be present in the spectra to be analyzed. This list does not have to be exhaustive; however, the more inclusive the list, the better the fitting and predicting results will be. 
 
 ### Project Breakdown
 The project can be thought of as broken down into 3 steps:
@@ -49,4 +47,13 @@ The team will continue working on this project in Spring of 2019 as apart of DIR
 2. Applying kinetic analysis to data sets to view the change in decomposition and formation of species given different boundary conditions (temperature, resonance time, and strech goal of pressure)
 
 ### Conclusion
-This software has passed tests to sucessfully identify and analyze the identification of components in a formic acid mixture Raman data set.
+In conclusion, our team successfully created a fast functioning open source code base that saves hours of research time in data cleaning and analysis of Raman Spectra. We have also set a strong base for the next step of our focus which is on calculating decomposition of substances using Lorentzian peak information that will be applied to machine learning optimum temperatures and pressures in a gasification reactor system.
+
+  * This software has passed tests to sucessfully identify and analyze the identification of components in mixture Raman data.
+
+  * This work sets up a free and user friendly platform for researchers to be able to analyze their own Raman Spectra.
+
+### Acknowledgements
+* Dave Beck, Chad Curtis, and Kelly Thornton
+* Data sets were taken from publicly available from the NIST WebBook Database and Mendeley Data, “Raman Spectra of Formic Acid Gasification Products in Subcritical and Supercritical Water”
+* Only open source packages were used in this work
