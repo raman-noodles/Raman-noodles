@@ -19,6 +19,11 @@ def test_download_cas():
     shoyu.download_cas(cas_num)
     assert os.path.isdir('raman_spectra/'), 'directory not found'
     assert os.path.isfile('raman_spectra/7732185_NIST_IR.jdx'), 'file not saved correctly'
+    #Various try statements to make sure that bad inputs are handled correctly. 
+    try:
+        shoyu.download_cas(7732185)
+    except TypeError:
+        print('An int was passed to the function, and it was handled well with a TypeError.')
 
 
 def test_add_jdx():
@@ -32,7 +37,12 @@ def test_add_jdx():
     assert 'Water_label_test' in shoyu_data_dict, 'custom label not applied successfully'
     water = shoyu_data_dict['Water_label_test']
     assert water['yunits'] == 'ABSORBANCE', 'Incorrect y units stored'
-
+    assert filename[-4:] == '.jdx', 'File type is not .jdx'
+    try:
+        shoyu.download_cas(1)
+    except TypeError:
+        print('An int was passed to the function, and it was handled well with a TypeError.')
+    
 
 def test_initialize_standard_library():
     """
@@ -55,6 +65,10 @@ def test_more_please():
     shoyu_data_dict = shoyu.more_please(cas_num)
     assert os.path.isfile('raman_spectra/109660_NIST_IR.jdx'), 'file not found'
     assert 'N-PENTANE' in shoyu_data_dict, 'N-PENTANE not successfully added to shoyu_data_dict'
+    try:
+        shoyu.download_cas(109660)
+    except TypeError:
+        print('An int was passed to the function, and it was handled well with a TypeError.')
 
 
 def test_clean_spectra():
@@ -65,6 +79,10 @@ def test_clean_spectra():
     comp_data_clean = shoyu.clean_spectra(compound)
     assert isinstance(comp_data_clean, list), 'output type not a list'
     assert len(comp_data_clean) < len(compound['x']), 'repeat data points were not removed'
+    try:
+        shoyu.clean_spectra(compound=[[1, 2, 3, 4], [0.2, 0.4, 1.0, 0.01]])
+    except TypeError:
+        print('A list was passed to the function, and it was handled well with a TypeError.')
 
 
 # def test_interpolate_spectra():

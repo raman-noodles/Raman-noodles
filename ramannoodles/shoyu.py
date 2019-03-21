@@ -31,6 +31,10 @@ def download_cas(cas_num):
     Returns:
         This function has no returns.
     """
+    # handling errors in inputs
+    if not isinstance(cas_num, str):
+        raise TypeError("Passed value of `cas_num` is not a string! Instead, it is: "
+                        + str(type(cas_num)))
     # drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
     if not os.path.exists('../raman_spectra/'+cas_num+'_NIST_IR.jdx'):
@@ -64,6 +68,9 @@ def add_jdx(filename, label=None):
                                 the pickle file and is the common way in which the user
                                 interacts with data in this software.
     """
+    if not isinstance(filename, str):
+        raise TypeError("Passed value of `filename` is not a string! Instead, it is: "
+                        + str(type(filename)))
     shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
     data = jcamp.JCAMP_reader(filename)
     y_abs = 1 - data['y']
@@ -131,6 +138,10 @@ def more_please(cas_num, label=None):
                                 the pickle file, and is the common way in which the user
                                 interacts with data in this software.
     """
+    # handling errors in inputs
+    if not isinstance(cas_num, str):
+        raise TypeError("Passed value of `cas_num` is not a string! Instead, it is: "
+                        + str(type(cas_num)))
     # Drop any '-' from cas_num
     cas_num = ''.join(cas_num.split('-'))
     download_cas(cas_num)
@@ -150,6 +161,10 @@ def clean_spectra(compound):
         comp_data_clean (list): list of tuples containing all the non-repeated
                                 x and y values
     """
+    # handling errors in inputs
+    if not isinstance(compound, dict):
+        raise TypeError("Passed value of `compound` is not a dictionary! Instead, it is: "
+                        + str(type(compound)))
     # extract data from dictionary
     x_comp = compound['x']
     y_comp = compound['y']
