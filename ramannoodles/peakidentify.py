@@ -221,8 +221,8 @@ def plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, unknown_peak_
     #Now we need to check the elements within the unknown_peak_assignment
     #to make sure they are correct.
     for i, _ in enumerate(unknown_peak_assignments):
-        if not isinstance(unknown_peak_assignments[i], str):
-            raise TypeError("""Passed value within `unknown_peak_assignment` is not a string!
+        if not isinstance(unknown_peak_assignments[i], (str, list)):
+            raise TypeError("""Passed value within `unknown_peak_assignment` is not correct!
             Instead, it is: """ + str(type(unknown_peak_assignments[i])))
 
     colors = ['b', 'r', 'g', 'c', 'm', 'y', 'b']
