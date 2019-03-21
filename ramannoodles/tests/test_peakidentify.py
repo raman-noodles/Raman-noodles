@@ -250,7 +250,9 @@ def test_plotting_peak_assignments():
     association_matrix = []
     for i in range(len(known_compound_list)):
         known_peaks.append(spectrafit.compound_report(known_compound_list[i])[0])
-    unknown_peak_assignments = peakidentify.percentage_of_peaks_found(known_peaks, association_matrix, known_compound_list)
+        association_matrix.append(peakidentify.compare_unknown_to_known(
+            unknown_peaks, known_peaks[i], precision))
+    unknown_peak_assignments = peakidentify.peak_position_comparisons(unknown_peaks, known_peaks, known_compound_list, association_matrix)
 
     #Test for input error handling.
     try:
