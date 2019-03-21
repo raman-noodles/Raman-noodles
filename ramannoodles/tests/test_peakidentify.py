@@ -282,55 +282,105 @@ def test_plotting_peak_assignments():
 
 def test_peak_1d_score():
     """Evaluates the functionality of the peak_1D_score function"""
-    # Initialize the test arguments
-    row_i = [0, 1]
-    row_j = [2, 1]
+    # Initialize the test arguments 
+    row_i = [0,1]
+    row_j = [2,1]
     rowcat = row_i + row_j
-    array_a = np.array([[0, 1], [2, 1], [0, 3]])
-    # Run Function for lists
-    testscore = peakidentify.peak_1d_score(row_i, row_j, 1)[0][:]
-    testpeaks = peakidentify.peak_1d_score(row_i, row_j, 1)[1][:]
-    # Run Function for arrays
-    arrayscore = peakidentify.peak_1d_score(array_a[0], array_a[2], 1)[0][:]
-    arraycat = np.concatenate((array_a[0], array_a[2]))
+    arraya = np.array([[0,1], [2,1],[0,3]])
+    arraycat = np.concatenate((arraya[0], arraya[2]))
+    
+    # Run Bad Function for lists
+    try:
+        testscore = peak_1d_score(row_i,row_j,-1)
+    except ValueError:
+        print("An invalid scoremax value was passed to the function, "
+              "and was handled correctly.")
+        
+    # Run Bad Function for arrays
+    try:
+        arrayscore = peak_1d_score(arraya[0], arraya[2], -1)
+
+    except ValueError:
+        print("An invalid scoremax value was passed to the function, "
+              "and was handled correctly.")
+    
+    # Running a good example
+    testscore = peak_1d_score(row_i,row_j,1)
+    arrayscore = peak_1d_score(arraya[0], arraya[2], 1)
+    
     # make assertions
     assert len(row_i) == len(row_j), 'Input lengths do not match'
-    assert len(arrayscore) == len(arraycat), 'Output list length different than concatenated lists length'
+    assert len(arrayscore[0][:]) == len(arraycat), 'Output list length different than concatenated lists length'
     for i in range(len(rowcat)):
-        assert testscore[i] <= 1, 'Output value outside acceptable range'
+        assert 0 <= testscore[0][i] <= 1, 'Output value outside acceptable range'
+        assert 0 <= arrayscore[0][i] <= 1, 'Output value outside acceptable range'
+    
 
 def test_score_max():
     """Evaluates the functionality of the score_max function"""
-    # Initialize the test arguments
-    row_i = [0, 1]
-    row_j = [2, 1]
-    rowcat = row_i + row_j
-    ArrayA = np.array([[0, 1], [2, 1], [0, 3]])
+    # Initialize the test arguments 
     k = 2
-    arraycat = np.concatenate((ArrayA[0], ArrayA[1]))
+    row_i = [0,3]
+    row_j = [2,1]
+    rowcat = row_i + row_j
+    arraya = np.array([[0,1], [2,1], [0,3]])
+    
+    arraycat = np.concatenate((arraya[0], arraya[1]))
+    
     # Run Function for lists
-    maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, k)
-    # Run Function for arrays
-    Arrmaxscores, Arrmaxpeaks = peakidentify.score_max(ArrayA[0], ArrayA[1], k)
-    # make assertions
-    assert len(Arrmaxscores) == len(arraycat), 'Output list length different than array length'
-    for i in range(len(arraycat)):
-        assert Arrmaxscores[i] <= 2, 'Output value outside acceptable range'
+    try:
+        maxscores,maxpeaks = score_max(row_i, row_j, -1)
+    except ValueError:
+        print("An invalid k value was passed to the function, "
+              "and was handled correctly.")
 
+     # Run Function for arrays
+    try:
+        arrmaxscores, arrmaxpeaks = score_max(arraya[0], arraya[1], -1)
+    except ValueError:
+        print("An invalid k value was passed to the function, "
+              "and was handled correctly.")
+    # Run good examples
+    maxscores,maxpeaks = score_max(row_i, row_j, k)
+    arrmaxscores,arrmaxpeaks = score_max(arraya[0], arraya[1], k)
+    # make assertions
+    assert len(arrmaxscores) == len(arraycat), 'Output list length different than concatenated lists length'
+    for i in range(len(arraycat)):
+        assert 0<= arrmaxscores[i] <= 2, 'Output value outside acceptable range'
+        assert 0<= maxscores[i] <= 2, 'Output value outside acceptable range'
+    for i,_ in enumerate(maxscores,1):
+        assert maxscores[i-1] >= maxscores[-1], 'Output values are less than the max value'
+        
 def test_score_sort():
     """Evaluates the functionality of the score_sort function"""
-    # Initialize the test arguments
-    row_i = [0, 1]
-    row_j = [2, 1]
+    # Initialize the test arguments 
+    row_i = [0,1]
+    row_j = [2,1]
     rowcat = row_i + row_j
-    ArrayA = np.array([[0, 1], [2, 1], [0, 3]])
+    arraya = np.array([[0, 1], [2, 1],[0, 3]])
     k = 2
-    arraycat = np.concatenate((ArrayA[0], ArrayA[1]))
+    arraycat = np.concatenate((arraya[0], arraya[1]))
     # Run Previous Function to get max score normalization
-    maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, k)
+    maxscores,maxpeaks = score_max(row_i, row_j, k)
     # Run Function for lists
-    sortedscores = peakidentify.score_sort(row_i, row_j, max(maxscores))[0][0]
+    try:
+        sortedscores = score_sort(row_i, row_j, max(maxscores))
+    except TypeError:
+        print("An invalid maxscores from score_max was passed to the function, "
+              "and was handled correctly.")
     # Run Function for arrays
-    Arrsortedscores = peakidentify.score_sort(ArrayA[0], ArrayA[1], max(maxscores))[0][0]
+    try:
+        arrsortedscores = score_sort(arraya[0], arraya[1], max(maxscores))
+    except TypeError:
+        print("An invalid maxscores from score_max was passed to the function, "
+              "and was handled correctly.")
+    # Run good examples
+    sortedscores = score_sort(row_i, row_j, int(max(maxscores)))
+    arrsortedscores = score_sort(arraya[0], arraya[1], int(max(maxscores)))
     # make assertions
-    assert len(arraycat) == len(Arrsortedscores), 'Output list length different than concatenated lists length'
+    assert len(arraycat) == len(arrsortedscores[0][0]), 'Output list length different than concatenated lists length'
+    assert len(rowcat) == len(sortedscores[0][0]), 'Output list length different than concatenated lists length'
+    for i,_ in enumerate(sortedscores):
+        assert sortedscores[0][0][i] <= sortedscores[0][0][i+1], 'Output values is sorted from smallest to largest'
+        assert arrsortedscores[0][0][i] <= arrsortedscores[0][0][i+1], 'Output values is sorted from smallest to largest'
+    
