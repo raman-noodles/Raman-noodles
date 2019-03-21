@@ -14,12 +14,12 @@ def peak_assignment(unknown_x, unknown_y, known_compound_list,
     """This function is a wrapper function from which all classification of peaks occurs."""
 
     #Handling errors in inputs.
-    if not isinstance(unknown_x, list):
-        raise TypeError("Passed value of `unknown_x` is not a list! Instead, it is: "
+    if not isinstance(unknown_x, np.ndarray):
+        raise TypeError("Passed value of `unknown_x` is not a np.ndarray! Instead, it is: "
                         + str(type(unknown_x)))
 
-    if not isinstance(unknown_y, list):
-        raise TypeError("Passed value of `unknown_y` is not a list! Instead, it is: "
+    if not isinstance(unknown_y, np.ndarray):
+        raise TypeError("Passed value of `unknown_y` is not a np.ndarray! Instead, it is: "
                         + str(type(unknown_y)))
 
     if not isinstance(known_compound_list, list):
@@ -210,12 +210,12 @@ def plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, unknown_peak_
         raise TypeError("""Passed value of `unknown_peaks` is not a list!
         Instead, it is: """ + str(type(unknown_peaks)))
 
-    if not isinstance(unknown_x, list):
-        raise TypeError("""Passed value of `unknown_x` is not a list!
+    if not isinstance(unknown_x, (list, np.ndarray)):
+        raise TypeError("""Passed value of `unknown_x` is not a list or ndarray!
         Instead, it is: """ + str(type(unknown_x)))
 
-    if not isinstance(unknown_y, list):
-        raise TypeError(""" Passed value of `unknown_y` is not a list!
+    if not isinstance(unknown_y, (list, np.ndarray)):
+        raise TypeError(""" Passed value of `unknown_y` is not a list or ndarray!
         Instead, it is: """ + str(type(unknown_y)))
 
     #Now we need to check the elements within the unknown_peak_assignment
@@ -248,70 +248,113 @@ def peak_1d_score(row_i, row_j, scoremax):
     #√((x1-x2)^2 + (y1-y2)^2) in 2D
 
     Parameters:
-        row_i (list):  input list
-        row_j (list): input list
-        scoremax (float): Euclidean reciprocal score divided by max score
+        row_i (list like):  input list
+        row_j (list like): input list
+        scoremax (float): Euclidean reciprocal score divided by max score; default is 1
 
     Returns:
         scores (list): Euclidean reciprocal scores
         peaks (tuple): peaks associated with scores
     """
+    # Handling errors at the input
+    if not isinstance(row_i, (list, np.ndarray)):
+        raise TypeError("""Passed value of `row_i` is not a list or ndarray!
+        Instead, it is: """ + str(type(row_i)))
+    if not isinstance(row_j, (list, np.ndarray)):
+        raise TypeError("""Passed value of `row_j` is not a list or ndarray!
+        Instead, it is: """ + str(type(row_j)))
+    if not isinstance(scoremax, (float, int)):
+        raise TypeError("""Passed value of `scoremax` is not a float or int!
+        Instead, it is: """ + str(type(scoremax)))
+    if scoremax < 0:
+        raise TypeError("""Passed value of `scoremax` is not within bounds!""")
+
+    # Initializing the variables
     scores = []
     peaks = []
 
     for i, _ in enumerate(row_i):
         for j, _ in enumerate(row_j):
+            # Calculating distances between peaks
             distance = np.where((row_i[i] - row_j[j] > 50), np.nan,
                                 math.sqrt(sum([math.pow(row_i[i] - row_j[j], 2)])))
             # Score for peaks less than 50 units apart
             if 1 / (distance + 1) > .02:
+                # Dividing over the given max score
                 scores.append(((1 / (distance + 1)) / scoremax))
+                # Appends a tuple of the compared peaks
                 peaks.append((row_i[i], row_j[j]))
             else:
                 pass
     return scores, peaks
 
 
-def score_max(list_input, row, k):
+def score_max(row_i, row_j, k):
     """
     Returns list of scores sorted with respect to the peaks
     related to its output max score
 
     Parameters:
-        list_input (list):  input list
-        row (list): input list
+        row_i (list like):  input list
+        row_j (list like): input list
         k (int): input integer used to sort the scores / kth highest score
 
     Returns:
         maxscores (list): Euclidean reciprocal score divided by max score
         maxpeaks (tuple): peaks associated with max scores
     """
+
+    # Handling errors at the input
+    if not isinstance(row_i, (list, np.ndarray)):
+        raise TypeError("""Passed value of `row_i` is not a list or ndarray!
+        Instead, it is: """ + str(type(row_i)))
+    if not isinstance(row_j, (list, np.ndarray)):
+        raise TypeError("""Passed value of `row_j` is not a list or ndarray!
+        Instead, it is: """ + str(type(row_j)))
+    if not isinstance(k, int):
+        raise TypeError("""Passed value of `k` is not an int!
+        Instead, it is: """ + str(type(k)))
+    if k > 0:
+        raise TypeError("""Passed value of `k` is not within bounds!""")
     try:
-        scoremax = sorted(set(peak_1d_score(list_input, row, 1)[0][:]))[-k]
-        maxscores, maxpeaks = peak_1d_score(list_input, row, scoremax)
+        scoremax = sorted(set(peak_1d_score(row_i, row_j, 1)[0][:]))[-k]
+        maxscores, maxpeaks = peak_1d_score(row_i, row_j, scoremax)
 
     except ValueError():
         print("""Function handed a bad value, therefore
         the ValueError was handled in the exception""")
 
-        maxscores, maxpeaks = peak_1d_score(list_input, row, scoremax=1)
+        maxscores, maxpeaks = peak_1d_score(row_i, row_j, scoremax=1)
 
     return maxscores, maxpeaks
 
 
-def score_sort(list_input, row, k):
+def score_sort(row_i, row_j, k):
     """
     Returns list of scores sorted
 
     Parameters:
-        list_input (list):  input list
-        row (list): input list
+        list_input (list like):  input list
+        row (list like): input list
         k (int): input integer used to sort the scores / kth highest score
 
     Returns:
         sortedscores (list): sorted Euclidean distances
     """
+    # Handling errors at the input
+    if not isinstance(row_i, (list, np.ndarray)):
+        raise TypeError("""Passed value of `row_i` is not a list or ndarray!
+        Instead, it is: """ + str(type(row_i)))
+    if not isinstance(row_j, (list, np.ndarray)):
+        raise TypeError("""Passed value of `row_j` is not a list or ndarray!
+        Instead, it is: """ + str(type(row_j)))
+    if not isinstance(k, int):
+        raise TypeError("""Passed value of `k` is not an int!
+        Instead, it is: """ + str(type(k)))
+    if k > 0:
+        raise TypeError("""Passed value of `k` is not within bounds!""")
+
     sortedscores = []
-    sortedscores.append(score_max(list_input, row, k))
+    sortedscores.append(score_max(row_i, row_j, k))
 
     return sortedscores
