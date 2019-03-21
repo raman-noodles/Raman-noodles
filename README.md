@@ -1,7 +1,7 @@
 # Raman-Noodles
-
-![travis build badge](https://travis-ci.org/raman-noodles/Raman-noodles.svg?branch=master)
-![raman noodles logo](https://user-images.githubusercontent.com/46499087/53783952-7c38f680-3ec8-11e9-8549-6bda4ba7743c.PNG)
+<p align="center">
+  <src="https://user-images.githubusercontent.com/46499087/53783952-7c38f680-3ec8-11e9-8549-6bda4ba7743c.PNG">
+</p>
 
 ## This is the UW DIRECT Winter 2019 Team Project GitHub Repo
 **Team members (alphabetical by first name): Brandon Kern, Elizabeth Rasmussen, Jon Onorato, Parker Steichen**
