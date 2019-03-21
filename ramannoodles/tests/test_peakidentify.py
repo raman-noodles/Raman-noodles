@@ -11,7 +11,7 @@ from ramannoodles import spectrafit
 def test_peak_assignment():
     """This function tests the operation of the peak_assignment function in peakidentify.py"""
     #First, generate a testing dataset.
-    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     compound_1 = shoyu_data_dict['WATER']
     compound_2 = shoyu_data_dict['CARBON MONOXIDE']
     compound_3 = shoyu_data_dict['CARBON DIOXIDE']
@@ -62,7 +62,7 @@ def test_compare_unknown_to_known():
     """This function tests the operation of the compare_unknown_to_known
     function in peakidentify.py"""
     #Build our test dataset.
-    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     compound_1 = shoyu_data_dict['WATER']
     compound_2 = shoyu_data_dict['CARBON MONOXIDE']
     compound_3 = shoyu_data_dict['CARBON DIOXIDE']
@@ -118,7 +118,7 @@ def test_peak_position_comparisons():
     contain text assignments of each peak in the unknown spectrum."""
 
     #First, generate good data.
-    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     compound_1 = shoyu_data_dict['WATER']
     compound_2 = shoyu_data_dict['CARBON MONOXIDE']
     compound_3 = shoyu_data_dict['CARBON DIOXIDE']
@@ -180,10 +180,11 @@ association_matrix)) == list, "The function is not returning a list."
     assert test_peak_labels[1][0] == 'Unassigned', "The function is not correctly handling a lack of peak assignments"
     assert test_peak_labels[2][0] == 'WATER', "The funciton is not correctly assigning peaks when association matrix = 1"
 
+
 def test_percentage_of_peaks_found():
     """This function tests the operation of the percentage_of_peaks_found function in peakidentify.py"""
     #First, generate good data.
-    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     compound_1 = shoyu_data_dict['WATER']
     compound_2 = shoyu_data_dict['CARBON MONOXIDE']
     compound_3 = shoyu_data_dict['CARBON DIOXIDE']
@@ -236,7 +237,7 @@ that is not a compound""")
 def test_plotting_peak_assignments():
     """This function tests the operation of the peak_assignment function in peakidentify.py"""
     #First, generate good data.
-    shoyu_data_dict = pickle.load(open('../raman_spectra/shoyu_data_dict.p', 'rb'))
+    shoyu_data_dict = pickle.load(open('raman_spectra/shoyu_data_dict.p', 'rb'))
     compound_1 = shoyu_data_dict['WATER']
     compound_2 = shoyu_data_dict['CARBON MONOXIDE']
     compound_3 = shoyu_data_dict['CARBON DIOXIDE']
@@ -279,6 +280,7 @@ def test_plotting_peak_assignments():
         peakidentify.plotting_peak_assignments(unknown_x, unknown_y, unknown_peaks, ['WATER', 23, 'CO'])
     except TypeError:
         print("The function correctly handled the case when an int was passed in the unknown_peak_assignment list")
+
 
 def test_peak_1d_score():
     """Evaluates the functionality of the peak_1D_score function"""
@@ -350,7 +352,8 @@ def test_score_max():
         assert 0<= maxscores[i] <= 2, 'Output value outside acceptable range'
     for i,_ in enumerate(maxscores,1):
         assert maxscores[i-1] >= maxscores[-1], 'Output values are less than the max value'
-        
+
+
 def test_score_sort():
     """Evaluates the functionality of the score_sort function"""
     # Initialize the test arguments 
@@ -383,4 +386,3 @@ def test_score_sort():
     for i,_ in enumerate(sortedscores):
         assert sortedscores[0][0][i] <= sortedscores[0][0][i+1], 'Output values is sorted from smallest to largest'
         assert arrsortedscores[0][0][i] <= arrsortedscores[0][0][i+1], 'Output values is sorted from smallest to largest'
-    
