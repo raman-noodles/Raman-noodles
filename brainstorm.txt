@@ -1,0 +1,7 @@
+Sub-projects for spring quarter
+- improved baseline function
+- LASSO regression on lorentzian fits
+- improvement to lorentzian fits including considering psuedo-voight
+- improve statistical basis for matching identified peaks with known values
+- identifiy other tools that researchers would find helpful in a Raman analysis toolkit
+ 
