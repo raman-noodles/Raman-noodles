@@ -97,9 +97,9 @@ def test_compare_unknown_to_known():
     #After testing for resilience to unexpected inputs, now ensure outputs are performing correctly
 
     #First, make sure function is returning the list.
-    assert type(peakidentify.compare_unknown_to_known(
-        unknown_peaks, known_peaks[0], precision)) == np.ndarray, (""
-                                                                   "Function is not returning list")
+    assert isinstance(peakidentify.compare_unknown_to_known(
+        unknown_peaks, known_peaks[0], precision), np.ndarray), (""
+                                                                 "Function is not returning list")
 
     #Compare one set of peaks to itself. The full association matrix should have all values = 1.
     self_comp = np.mean(peakidentify.compare_unknown_to_known(known_peaks[0],
@@ -126,7 +126,6 @@ def test_peak_position_comparisons():
     unknown_x = np.asarray(unknown_x)
     unknown_y = np.asarray(unknown_y)
     known_compound_list = [compound_1, compound_2, compound_3]
-    precision = 0.03
     unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     known_peaks = []
     association_matrix = []
@@ -172,34 +171,34 @@ def test_peak_position_comparisons():
               "and was handled correctly.")
 
     #Check to make sure the function is returning a list.
-    assert type(peakidentify.peak_position_comparisons(
+    assert isinstance(peakidentify.peak_position_comparisons(
         unknown_peaks, known_peaks, known_compound_list,
-        association_matrix)) == list, "The function is not returning a list."
+        association_matrix), list), "The function is not returning a list."
 
     #Test a call that says that no peaks have associations
     association_matrix_0 = []
     association_matrix_0.append(peakidentify.compare_unknown_to_known(known_peaks[0],
                                                                       known_peaks[1],
                                                                       0.03))
-    Zero_Output = peakidentify.peak_position_comparisons(known_peaks[0],
+    zero_output = peakidentify.peak_position_comparisons(known_peaks[0],
                                                          [known_peaks[1]],
                                                          [compound_1],
                                                          association_matrix_0)[0]
-    assert Zero_Output[0] == 'Unassigned', """The function is not properly
+    assert zero_output[0] == 'Unassigned', """The function is not properly
     handling unassigned peaks."""
 
     #Test the function to make sure that it has the right functionality
-    association_matrix_1 = []
+    association_matrix = []
     #Generate a matrix with all associations equal to 1
-    association_matrix_1.append(peakidentify.compare_unknown_to_known(known_peaks[0],
-                                                                      known_peaks[0],
-                                                                      0.03))
+    association_matrix.append(peakidentify.compare_unknown_to_known(known_peaks[0],
+                                                                    known_peaks[0],
+                                                                    0.03))
     #change the middle index to 0
-    association_matrix_1[0][1] = 0
+    association_matrix[0][1] = 0
     test_peak_labels = peakidentify.peak_position_comparisons(known_peaks[0],
                                                               [known_peaks[0]],
                                                               [compound_1],
-                                                              association_matrix_1)
+                                                              association_matrix)
     assert test_peak_labels[0][0] == 'WATER', """The function is
     not correctly assigning peaks when association matrix = 1"""
     assert test_peak_labels[1][0] == 'Unassigned', """The function is
@@ -219,7 +218,6 @@ def test_percentage_of_peaks_found():
     unknown_x = np.asarray(unknown_x)
     unknown_y = np.asarray(unknown_y)
     known_compound_list = [compound_1, compound_2, compound_3]
-    precision = 0.03
     unknown_peaks = spectrafit.data_report(unknown_x, unknown_y)[0]
     known_peaks = []
     association_matrix = []
@@ -227,7 +225,7 @@ def test_percentage_of_peaks_found():
         known_peaks.append(spectrafit.compound_report(known_compound_list[i])[0])
         association_matrix.append(peakidentify.compare_unknown_to_known(unknown_peaks,
                                                                         known_peaks[i],
-                                                                        precision))
+                                                                        0.03))
 
     #Test for input error handling.
     try:
@@ -261,10 +259,10 @@ def test_percentage_of_peaks_found():
         list contains something that is not a compound""")
 
     #Test to make sure function returns a dictionary.
-    assert type(peakidentify.percentage_of_peaks_found(
+    assert isinstance(peakidentify.percentage_of_peaks_found(
         known_peaks,
         association_matrix,
-        known_compound_list)) == dict, """The function is not
+        known_compound_list), dict), """The function is not
         returning a dictionary."""
 
     #Test for function output.
@@ -405,7 +403,7 @@ def test_score_max():
     # Run Function for lists
     try:
 
-        maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, -1)
+        maxscores = peakidentify.score_max(row_i, row_j, -1)
 
     except ValueError:
 
@@ -415,7 +413,7 @@ def test_score_max():
      # Run Function for arrays
     try:
 
-        arrmaxscores, arrmaxpeaks = peakidentify.score_max(arraya[0], arraya[1], -1)
+        arrmaxscores = peakidentify.score_max(arraya[0], arraya[1], -1)
 
     except ValueError:
 
@@ -423,17 +421,17 @@ def test_score_max():
               "and was handled correctly.")
 
     # Run good examples
-    maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, k)
-    arrmaxscores, arrmaxpeaks = peakidentify.score_max(arraya[0], arraya[1], k)
+    maxscores = peakidentify.score_max(row_i, row_j, k)
+    arrmaxscores = peakidentify.score_max(arraya[0], arraya[1], k)
 
     # make assertions
-    assert len(arrmaxscores) == len(arraycat), """Output list length different
+    assert len(arrmaxscores[0]) == len(arraycat), """Output list length different
     than concatenated lists length"""
-    for i, _ in enumerate(arraycat):
-        assert 0 <= arrmaxscores[i] <= 2, 'Output value outside acceptable range'
-        assert 0 <= maxscores[i] <= 2, 'Output value outside acceptable range'
+    for i, _ in enumerate(rowcat):
+        assert 0 <= arrmaxscores[0][i] <= 2, 'Output value outside acceptable range'
+        assert 0 <= maxscores[0][i] <= 2, 'Output value outside acceptable range'
     for i, _ in enumerate(maxscores, 1):
-        assert maxscores[i-1] >= maxscores[-1], 'Output values are less than the max value'
+        assert maxscores[0][i-1] >= maxscores[0][-1], 'Output values are less than the max value'
 
 
 def test_score_sort():
@@ -446,12 +444,12 @@ def test_score_sort():
     k = 2
     arraycat = np.concatenate((arraya[0], arraya[1]))
     # Run Previous Function to get max score normalization
-    maxscores, maxpeaks = peakidentify.score_max(row_i, row_j, k)
+    maxscores = peakidentify.score_max(row_i, row_j, k)
 
     # Run Function for lists
 
     try:
-        sortedscores = peakidentify.score_sort(row_i, row_j, max(maxscores))
+        sortedscores = peakidentify.score_sort(row_i, row_j, max(maxscores[0]))
 
     except TypeError:
 
@@ -462,7 +460,7 @@ def test_score_sort():
 
     try:
 
-        arrsortedscores = peakidentify.score_sort(arraya[0], arraya[1], max(maxscores))
+        arrsortedscores = peakidentify.score_sort(arraya[0], arraya[1], max(maxscores[0]))
 
     except TypeError:
 
@@ -470,10 +468,10 @@ def test_score_sort():
               "and was handled correctly.")
 
     # Run good examples
-    sortedscores = peakidentify.score_sort(row_i, row_j, int(max(maxscores)))
+    sortedscores = peakidentify.score_sort(row_i, row_j, int(max(maxscores[0])))
     arrsortedscores = peakidentify.score_sort(arraya[0],
                                               arraya[1],
-                                              int(max(maxscores)))
+                                              int(max(maxscores[0])))
     # make assertions
     assert len(arraycat) == len(arrsortedscores[0][0]), """Output list length
     different than concatenated lists length"""
