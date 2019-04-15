@@ -342,7 +342,7 @@ def compound_report(compound):
     # detect peaks
     peaks = peak_detect(x_data, y_data)[0]
     # assign parameters for least squares fit
-    mod, pars = lorentz_params(peaks)
+    mod, pars = set_params(peaks)
     # fit the model to the data
     out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
@@ -389,7 +389,7 @@ def data_report(x_data, y_data):
     # detect peaks
     peaks = peak_detect(x_data, y_data)[0]
     # assign parameters for least squares fit
-    mod, pars = lorentz_params(peaks)
+    mod, pars = set_params(peaks)
     # fit the model to the data
     out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
