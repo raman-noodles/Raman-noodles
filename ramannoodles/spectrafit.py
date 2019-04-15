@@ -12,7 +12,7 @@ Developed by the Raman-Noodles team.
 import matplotlib.pyplot as plt
 import numpy as np
 import lmfit
-from lmfit.models import LorentzianModel
+from lmfit.models import PseudoVoigtModel
 from peakutils.baseline import baseline
 from scipy.signal import find_peaks
 
@@ -119,19 +119,19 @@ def peak_detect(x_data, y_data, height=0.1, prominence=0.1, distance=10):
     return peaks, peak_list
 
 
-def lorentz_params(peaks):
+def set_params(peaks):
     """
     This module takes in the list of peaks from the peak detection modules, and then uses
-    that to initialize parameters for a set of Lorentzian models that are not yet fit.
+    that to initialize parameters for a set of Pseudo-Voigt models that are not yet fit.
     There is a single model for every peak.
 
     Args:
         peaks (list): A list containing the x and y-values (in tuples) of the peaks.
 
     Returns:
-         mod (lmfit.model.CompositeModel): This is an array of the initialized lorentzian
-                        models. The array contains all of the values that are found in
-                        `pars` that are fed to an lmfit lorentzian model class.
+         mod (lmfit.models.PseudoVoigtModel or lmfit.model.CompositeModel): This is an array of
+                        the initialized Pseudo-Voigt models. The array contains all of the values
+                        that are found in `pars` that are fed to an lmfit lorentzian model class.
         pars (lmfit.parameter.Parameters): An array containing the parameters for each peak
                         that were generated through the use of a Lorentzian fit. The pars
                         array contains a center value, a height, a sigma, and an amplitude
@@ -157,15 +157,14 @@ def lorentz_params(peaks):
     peak_list = []
     for i, _ in enumerate(peaks):
         prefix = 'p{}_'.format(i+1)
-        peak = LorentzianModel(prefix=prefix)
+        peak = PseudoVoigtModel(prefix=prefix)
         if i == 0:
             pars = peak.make_params()
         else:
             pars.update(peak.make_params())
-        pars[prefix+'center'].set(peaks[i][0], vary=True,
-                                  min=(peaks[i][0]-10), max=(peaks[i][0]+10))
-        pars[prefix+'height'].set(peaks[i][1], vary=True, min=0, max=1)
-        pars[prefix+'sigma'].set(min=0, max=500)
+        pars[prefix+'center'].set(peaks[i][0], vary=False)
+        pars[prefix+'height'].set(peaks[i][1], vary=False)
+        pars[prefix+'sigma'].set(50, min=0, max=500)
         pars[prefix+'amplitude'].set(min=0)
         peak_list.append(peak)
         if i == 0:
@@ -213,9 +212,9 @@ def model_fit(x_data, y_data, mod, pars, report=False):
     if not isinstance(y_data, (list, np.ndarray)):
         raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
                         + str(type(y_data)))
-    if not isinstance(mod, lmfit.model.CompositeModel):
-        raise TypeError("""Passed value of `mod` is not a lmfit.model.CompositeModel!
-         Instead, it is: """ + str(type(mod)))
+    if not isinstance(mod, (lmfit.models.PseudoVoigtModel, lmfit.model.CompositeModel):
+        raise TypeError("""Passed value of `mod` is not a lmfit.models.PseudoVoigtModel or a 
+        lmfit.model.CompositeModel! Instead, it is: """ + str(type(mod)))
     if not isinstance(pars, lmfit.parameter.Parameters):
         raise TypeError("""Passed value of `pars` is not a lmfit.parameter.Parameters!
          Instead, it is: """ + str(type(pars)))
@@ -289,13 +288,15 @@ def export_fit_data(out):
 
     Returns:
         fit_peak_data (numpy array): An array containing both the peak number, as well as the
-                        sigma, center, amplitude, full-width, half-max, and the height of the
-                        peaks. The data can be accessed by the array positions shown here:
-                            fit_peak_data[i][0] = p[i]_simga
-                            fit_peak_data[i][1] = p[i]_center
-                            fit_peak_data[i][2] = p[i]_amplitude
-                            fit_peak_data[i][3] = p[i]_fwhm
-                            fit_peak_data[i][4] = p[i]_height
+                        fraction Lorentzian character, sigma, center, amplitude, full-width,
+                        half-max, and the height of the peaks. The data can be accessed by the
+                        array positions shown here:
+                            fit_peak_data[i][0] = p[i]_fraction
+                            fit_peak_data[i][1] = p[i]_simga
+                            fit_peak_data[i][2] = p[i]_center
+                            fit_peak_data[i][3] = p[i]_amplitude
+                            fit_peak_data[i][4] = p[i]_fwhm
+                            fit_peak_data[i][5] = p[i]_height
     """
     # handling errors in inputs
     if not isinstance(out, lmfit.model.ModelResult):

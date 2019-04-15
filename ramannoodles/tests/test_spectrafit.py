@@ -92,24 +92,24 @@ def test_peak_detect():
         print('A str was passed to the function, and was handled well with a TypeError.')
 
 
-def test_lorentz_params():
+def test_set_params():
     """
-    Test function that confirms spectrafit.lorentz_params behaves as expected. It confirms that
+    Test function that confirms spectrafit.set_params behaves as expected. It confirms that
     the output types are correct, that the number of parameters is proportional to the number
     of peaks, and that input type errors are handled.
     """
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
-    mod, pars = spectrafit.lorentz_params(peaks)
-    assert isinstance(mod, lmfit.model.CompositeModel), 'mod is not a lmfit CompositeModel'
+    mod, pars = spectrafit.set_params(peaks)
+    assert isinstance(mod, (lmfit.models.PseudoVoigtModel, lmfit.model.CompositeModel), 'mod is not a lmfit CompositeModel'
     assert isinstance(pars, lmfit.parameter.Parameters), 'pars are not lmfit Parameters'
-    assert len(pars) == 5*len(peaks), 'incorrect ratio of parameters to peaks'
+    assert len(pars) == 6*len(peaks), 'incorrect ratio of parameters to peaks'
     try:
-        spectrafit.lorentz_params(1.1)
+        spectrafit.set_params(1.1)
     except TypeError:
         print('A float was passed to the function, and was handled well with a TypeError.')
     try:
-        spectrafit.lorentz_params([1, 2, 3, 4])
+        spectrafit.set_params([1, 2, 3, 4])
     except TypeError:
         print("""A list of ints was passed to the function,
          and it was handled well with a TypeError.""")
@@ -124,7 +124,7 @@ def test_model_fit():
     """
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
-    mod, pars = spectrafit.lorentz_params(peaks)
+    mod, pars = spectrafit.set_params(peaks)
     out = spectrafit.model_fit(X_TEST, y_test, mod, pars)
     assert isinstance(out, lmfit.model.ModelResult), 'output is not a lmfit ModelResult'
     assert len(out.best_fit) == len(y_test), 'size of fit incorrect'
@@ -159,7 +159,7 @@ def test_plot_fit():
     """
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
-    mod, pars = spectrafit.lorentz_params(peaks)
+    mod, pars = spectrafit.set_params(peaks)
     out = spectrafit.model_fit(X_TEST, y_test, mod, pars)
     try:
         spectrafit.plot_fit(1.2, y_test, out)
@@ -191,13 +191,13 @@ def test_export_fit_data():
     """
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
-    mod, pars = spectrafit.lorentz_params(peaks)
+    mod, pars = spectrafit.set_params(peaks)
     out = spectrafit.model_fit(X_TEST, y_test, mod, pars)
     fit_peak_data = spectrafit.export_fit_data(out)
     assert isinstance(fit_peak_data, list), 'output is not a list'
     assert np.asarray(fit_peak_data).shape == (int(len(out.values)/5), 5), """
     output is not the correct shape"""
-    assert len(fit_peak_data) == int(len(out.values)/5), 'incorrect number of peaks exported'
+    assert len(fit_peak_data) == int(len(out.values)/6), 'incorrect number of peaks exported'
     try:
         spectrafit.export_fit_data(mod)
     except TypeError:
