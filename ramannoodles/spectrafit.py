@@ -212,7 +212,7 @@ def model_fit(x_data, y_data, mod, pars, report=False):
     if not isinstance(y_data, (list, np.ndarray)):
         raise TypeError('Passed value of `y_data` is not a list or numpy.ndarray! Instead, it is: '
                         + str(type(y_data)))
-    if not isinstance(mod, (lmfit.models.PseudoVoigtModel, lmfit.model.CompositeModel):
+    if not isinstance(mod, (lmfit.models.PseudoVoigtModel, lmfit.model.CompositeModel)):
         raise TypeError("""Passed value of `mod` is not a lmfit.models.PseudoVoigtModel or a 
         lmfit.model.CompositeModel! Instead, it is: """ + str(type(mod)))
     if not isinstance(pars, lmfit.parameter.Parameters):

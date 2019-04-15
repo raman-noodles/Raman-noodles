@@ -101,7 +101,7 @@ def test_set_params():
     y_test = spectrafit.subtract_baseline(Y_TEST)
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
     mod, pars = spectrafit.set_params(peaks)
-    assert isinstance(mod, (lmfit.models.PseudoVoigtModel, lmfit.model.CompositeModel), 'mod is not a lmfit CompositeModel'
+    assert isinstance(mod, (lmfit.models.PseudoVoigtModel, lmfit.model.CompositeModel)), 'mod is not a lmfit CompositeModel'
     assert isinstance(pars, lmfit.parameter.Parameters), 'pars are not lmfit Parameters'
     assert len(pars) == 6*len(peaks), 'incorrect ratio of parameters to peaks'
     try:
