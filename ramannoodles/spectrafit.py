@@ -347,13 +347,19 @@ def compound_report(compound):
     out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
     fit_peak_data = export_fit_data(out)
+    # peak_fractions = []
     peak_centers = []
     peak_sigma = []
     peak_ampl = []
+    # peak_height = []
     for i, _ in enumerate(fit_peak_data):
-        peak_sigma.append(fit_peak_data[i][0])
-        peak_centers.append(fit_peak_data[i][1])
-        peak_ampl.append(fit_peak_data[i][2])
+        # peak_fractions.append(fit_peak_data[i][0])
+        # if we ever need lorentzian fraction we can add it
+        # right now it may break other functions 
+        peak_sigma.append(fit_peak_data[i][1])
+        peak_centers.append(fit_peak_data[i][2])
+        peak_ampl.append(fit_peak_data[i][3])
+        # peak_height.append(fit_peak_data[i][5])
     xmin = min(x_data)
     xmax = max(x_data)
     return peak_centers, peak_sigma, peak_ampl, xmin, xmax
@@ -394,13 +400,19 @@ def data_report(x_data, y_data):
     out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
     fit_peak_data = export_fit_data(out)
+    # peak_fractions = []
     peak_centers = []
     peak_sigma = []
     peak_ampl = []
+    # peak_height = []
     for i, _ in enumerate(fit_peak_data):
-        peak_sigma.append(fit_peak_data[i][0])
-        peak_centers.append(fit_peak_data[i][1])
-        peak_ampl.append(fit_peak_data[i][2])
+        # peak_fractions.append(fit_peak_data[i][0])
+        # if we ever need lorentzian fraction we can add it
+        # right now it may break other functions 
+        peak_sigma.append(fit_peak_data[i][1])
+        peak_centers.append(fit_peak_data[i][2])
+        peak_ampl.append(fit_peak_data[i][3])
+        # peak_height.append(fit_peak_data[i][5])
     xmin = min(x_data)
     xmax = max(x_data)
     return peak_centers, peak_sigma, peak_ampl, xmin, xmax
