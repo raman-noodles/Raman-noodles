@@ -195,7 +195,8 @@ def test_export_fit_data():
     out = spectrafit.model_fit(X_TEST, y_test, mod, pars)
     fit_peak_data = spectrafit.export_fit_data(out)
     assert isinstance(fit_peak_data, list), 'output is not a list'
-    assert np.asarray(fit_peak_data).shape == (int(len(out.values)/5), 5), """
+    assert np.asarray(fit_peak_data).shape == (int(len(out.values)/6), 6
+), """
     output is not the correct shape"""
     assert len(fit_peak_data) == int(len(out.values)/6), 'incorrect number of peaks exported'
     try:

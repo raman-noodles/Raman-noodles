@@ -303,14 +303,15 @@ def export_fit_data(out):
         raise TypeError('Passed value of `out` is not a lmfit.model.ModelResult! Instead, it is: '
                         + str(type(out)))
     fit_peak_data = []
-    for i in range(int(len(out.values)/5)):
-        peak = np.zeros(5)
+    for i in range(int(len(out.values)/6)):
+        peak = np.zeros(6)
         prefix = 'p{}_'.format(i+1)
-        peak[0] = out.values[prefix+'sigma']
-        peak[1] = out.values[prefix+'center']
-        peak[2] = out.values[prefix+'amplitude']
-        peak[3] = out.values[prefix+'fwhm']
-        peak[4] = out.values[prefix+'height']
+        peak[0] = out.values[prefix+'fraction']
+        peak[1] = out.values[prefix+'sigma']
+        peak[2] = out.values[prefix+'center']
+        peak[3] = out.values[prefix+'amplitude']
+        peak[4] = out.values[prefix+'fwhm']
+        peak[5] = out.values[prefix+'height']
         fit_peak_data.append(peak)
     return fit_peak_data
 
@@ -347,22 +348,22 @@ def compound_report(compound):
     out = model_fit(x_data, y_data, mod, pars)
     # export data in logical structure (see docstring)
     fit_peak_data = export_fit_data(out)
-    # peak_fractions = []
-    peak_centers = []
+    # peak_fraction = []
+    peak_center = []
     peak_sigma = []
     peak_ampl = []
     # peak_height = []
     for i, _ in enumerate(fit_peak_data):
-        # peak_fractions.append(fit_peak_data[i][0])
+        # peak_fraction.append(fit_peak_data[i][0])
         # if we ever need lorentzian fraction we can add it
         # right now it may break other functions 
         peak_sigma.append(fit_peak_data[i][1])
-        peak_centers.append(fit_peak_data[i][2])
+        peak_center.append(fit_peak_data[i][2])
         peak_ampl.append(fit_peak_data[i][3])
         # peak_height.append(fit_peak_data[i][5])
     xmin = min(x_data)
     xmax = max(x_data)
-    return peak_centers, peak_sigma, peak_ampl, xmin, xmax
+    return peak_center, peak_sigma, peak_ampl, xmin, xmax
 
 
 def data_report(x_data, y_data):
