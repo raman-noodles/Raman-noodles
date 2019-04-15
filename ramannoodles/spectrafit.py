@@ -129,7 +129,7 @@ def set_params(peaks):
         peaks (list): A list containing the x and y-values (in tuples) of the peaks.
 
     Returns:
-         mod (lmfit.models.PseudoVoigtModel or lmfit.model.CompositeModel): This is an array of
+        mod (lmfit.models.PseudoVoigtModel or lmfit.model.CompositeModel): This is an array of
                         the initialized Pseudo-Voigt models. The array contains all of the values
                         that are found in `pars` that are fed to an lmfit lorentzian model class.
         pars (lmfit.parameter.Parameters): An array containing the parameters for each peak
