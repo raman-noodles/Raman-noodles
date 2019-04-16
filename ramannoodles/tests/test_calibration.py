@@ -1,6 +1,8 @@
 """docstring"""
+import os
 import h5py
 from ramannoodles import calibration
+
 
 def test_new_cal():
     """docstring"""
@@ -11,3 +13,34 @@ def test_new_cal():
         calibration.new_cal(4.2)
     except TypeError:
         print('A float was passed to the function, and it was handled well with a TypeError.')
+    os.remove('function_test.hdf5')
+        
+        
+def test_add_compound():
+    """docstring"""
+    cal_file = calibration.new_cal('test')
+    cal_file.close()
+    cal_file = calibration.add_compound('test.hdf5',
+                                            'ramannoodles/tests/test_files/Methane_Baseline_Calibration.xlsx',
+                                            label='Methane')
+    assert list(cal_file.keys())[0] == 'Methane', 'custom label not applied correctly'
+    assert len(cal_file) == 1, 'more than one first order group assigned to test.hdf5'
+    assert len(cal_file['Methane']) == 3, 'more then 1 peak was stored'
+    assert 'Methane/x' in cal_file, 'x data (wavenumber) not stored correctly'
+    assert 'Methane/y' in cal_file, 'y data (counts) not stored correctly'
+    # test that function assigns filename correctly as compound label
+    cal_file1 = calibration.new_cal('test1')
+    cal_file1.close()
+    cal_file1 = calibration.add_compound('test1.hdf5',
+                                         'ramannoodles/tests/test_files/Methane_Baseline_Calibration.xlsx')
+    assert list(cal_file1.keys())[0] == 'Methane_Baseline_Calibration', 'filename label not applied correctly'
+    try:
+        calibration.add_compound(4.2, 'CarbonMonoxide_Baseline_Calibration.xlsx')
+    except TypeError:
+        print('A float was passed to the function, and it was handled well with a TypeError.')
+    try:
+        calibration.add_compound('test.hdp5', 4.2)
+    except TypeError:
+        print('A float was passed to the function, and it was handled well with a TypeError.')
+    os.remove('test.hdf5')
+    os.remove('test1.hdf5')
