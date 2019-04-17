@@ -4,7 +4,7 @@ import pandas as pd
 from ramannoodles import spectrafit
 
 
-def new_cal(new_filename):
+def new_hdf5(new_filename):
     """docstring"""
     # handling input errors
     if not isinstance(new_filename, str):
