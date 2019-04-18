@@ -15,7 +15,7 @@ def new_hdf5(new_filename):
     return cal_file
 
 
-def add_compound(cal_filename, data_filename, label=None):
+def add_calibration(cal_filename, data_filename, label=None):
     """docstring"""
     # handling input errors
     if not isinstance(cal_filename, str):
@@ -40,20 +40,17 @@ def add_compound(cal_filename, data_filename, label=None):
     else:
         pass
     # peak detection and data fitting
-    peaks = spectrafit.peak_detect(data['x'].values, data['y'].values, height=10, prominence=20)[0]
-    mod, pars = spectrafit.set_params(peaks)
-    out = spectrafit.model_fit(data['x'].values, data['y'].values, mod, pars)
-    fit_result = spectrafit.export_fit_data(out)
+    fit_result = spectrafit.fit_data(data['x'].values, data['y'].values)
     # write data to .hdf5 using custom label if provided
     if label is not None:
-        cal_file['{}/x'.format(label)] = data['x']
-        cal_file['{}/y'.format(label)] = data['y']
+        cal_file['{}/wavenumber(cm^-1)'.format(label)] = data['x']
+        cal_file['{}/counts'.format(label)] = data['y']
         for i, _ in enumerate(fit_result):
             cal_file['{}/Peak_{}'.format(label, i+1)] = fit_result[i]
     else:
         label = (data_filename.split('/')[-1]).split('.')[0]
-        cal_file['{}/x'.format(label)] = data['x']
-        cal_file['{}/y'.format(label)] = data['y']
+        cal_file['{}/wavenumber(cm^-1)'.format(label)] = data['x']
+        cal_file['{}/counts'.format(label)] = data['y']
         for i, _ in enumerate(fit_result):
             cal_file['{}/Peak_{}'.format(label, i+1)] = fit_result[i]
     return cal_file
