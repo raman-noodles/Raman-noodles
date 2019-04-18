@@ -63,7 +63,7 @@ def subtract_baseline(y_data, deg=3, plot=False, x_data=None):
     return y_out
 
 
-def peak_detect(x_data, y_data, height=10, prominence=20, distance=10):
+def peak_detect(x_data, y_data, height=0.1, prominence=0.1, distance=10):
     """
     Function that utilizes scipy to find peak maxima from input spectral data. Default
     detection parameters are chosen for the user based upon values that worked well during
@@ -317,8 +317,12 @@ def export_fit_data(out):
 
 
 def fit_data(x_data, y_data):
-    """docstring"""
-    peaks = peak_detect(x_data, y_data)[0]
+    """
+    small wrapper function used in dataprep.py
+    can remove height/prominence values once the peak_detect
+    function is updated to be proportional to the data
+    """
+    peaks = peak_detect(x_data, y_data, height=10, prominence=20)[0]
     mod, pars = set_params(peaks)
     out = model_fit(x_data, y_data, mod, pars)
     fit_result = export_fit_data(out)
