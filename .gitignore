@@ -10,4 +10,5 @@ ramannoodles.egg-info
 *.jdx
 *.p
 *.ipynb_checkpoints
+*.hdf5
 .DS_Store
