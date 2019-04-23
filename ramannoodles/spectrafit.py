@@ -262,7 +262,7 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
         raise TypeError('Passed value of `plot_components` is not a boolean! Instead, it is: '
                         + str(type(plot_components)))
     plt.figure(figsize=(15, 6))
-    plt.ylabel('Counts (Normalized)', fontsize=14)
+    plt.ylabel('Counts', fontsize=14)
     plt.xlabel('Wavenumber (cm$^{-1}$)', fontsize=14)
     plt.xlim(min(x_data), max(x_data))
     plt.plot(x_data, y_data, 'r', alpha=1, linewidth=2, label='data')
@@ -270,8 +270,8 @@ def plot_fit(x_data, y_data, fit_result, plot_components=False):
     if plot_components:
         comps = fit_result.eval_components(x=x_data)
         prefix = 'p{}_'.format(1)
-        plt.plot(x_data, comps[prefix], 'b--', linewidth=1, label='peak lorentzians')
-        for i in range(1, int(len(fit_result.values)/5)):
+        plt.plot(x_data, comps[prefix], 'b--', linewidth=1, label='peak pseudo-Voigt profile')
+        for i in range(1, int(len(fit_result.values)/6)):
             prefix = 'p{}_'.format(i+1)
             plt.plot(x_data, comps[prefix], 'b--', linewidth=1)
     plt.legend(fontsize=12)

@@ -161,6 +161,7 @@ def test_plot_fit():
     peaks = spectrafit.peak_detect(X_TEST, y_test)[0]
     mod, pars = spectrafit.set_params(peaks)
     out = spectrafit.model_fit(X_TEST, y_test, mod, pars)
+    spectrafit.plot_fit(X_TEST, y_test, out, plot_components=True)
     try:
         spectrafit.plot_fit(1.2, y_test, out)
     except TypeError:
