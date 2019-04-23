@@ -7,4 +7,4 @@ setup(name='ramannoodles',
       author='Raman Noodles Group, University of Washington (2019)',
       license='MIT',
       packages=['ramannoodles'],
-      install_requires=['numpy', 'jcamp', 'requests', 'matplotlib', 'scipy', 'lmfit', 'peakutils', 'h5py'])
+      install_requires=['numpy', 'jcamp', 'requests', 'matplotlib', 'scipy', 'lmfit', 'peakutils', 'h5py', 'pandas'])
